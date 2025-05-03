@@ -19,19 +19,8 @@ jobs:
         run: |
           echo "RELEASE_NAME=Released on $(date +%Y%m%d%H%M)" >> $GITHUB_ENV # 定义发布名称
           echo "TAG_NAME=$(date +%Y%m%d%H%M)" >> $GITHUB_ENV # 定义标签名称
-          echo "CHINA_DOMAINS_URL=https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/accelerated-domains.china.conf" >> $GITHUB_ENV # 中国域名规则文件
           echo "GOOGLE_DOMAINS_URL=https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/google.china.conf" >> $GITHUB_ENV # Google 域名规则文件
           echo "APPLE_DOMAINS_URL=https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/apple.china.conf" >> $GITHUB_ENV # Apple 域名规则文件
-          echo "EASYLISTCHINA_EASYLIST_REJECT_URL=https://easylist-downloads.adblockplus.org/easylistchina+easylist.txt" >> $GITHUB_ENV # EasyList 中国广告屏蔽规则
-          echo "PETERLOWE_REJECT_URL=https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=1&mimetype=plaintext" >> $GITHUB_ENV # 广告服务器规则
-          echo "ADGUARD_DNS_REJECT_URL=https://adguardteam.github.io/AdGuardSDNSFilter/Filters/filter.txt" >> $GITHUB_ENV # AdGuard 拒绝规则
-          echo "DANPOLLOCK_REJECT_URL=https://someonewhocares.org/hosts/hosts" >> $GITHUB_ENV # hosts 拒绝规则
-          echo "CUSTOM_DIRECT=https://raw.githubusercontent.com/Loyalsoldier/domain-list-custom/release/cn.txt" >> $GITHUB_ENV # 自定义直连规则
-          #echo "CUSTOM_PROXY=https://raw.githubusercontent.com/Loyalsoldier/domain-list-custom/release/geolocation-!cn.txt" >> $GITHUB_ENV # 自定义代理规则
-          #echo "CUSTOM_PROXY=https://github.com/najloa/v2ray-rules-dat/raw/refs/heads/hidden/geolocation-!cn.txt" >> $GITHUB_ENV # 自定义代理规则
-          echo "WIN_SPY=https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt" >> $GITHUB_ENV # Windows 间谍规则
-          echo "WIN_UPDATE=https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/update.txt" >> $GITHUB_ENV # Windows 更新规则
-          echo "WIN_EXTRA=https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/extra.txt" >> $GITHUB_ENV # Windows 额外规则
         shell: bash # 指定使用 Bash 作为 Shell
 
       - name: Checkout the "hidden" branch of this repo # 检出本仓库的 "hidden" 分支
@@ -65,52 +54,24 @@ jobs:
 
       - name: Get geoip.dat relative files # 下载 geoip.dat 相关文件
         run: |
-          wget https://github.com/Loyalsoldier/geoip/raw/release/geoip.dat # 下载 geoip.dat 文件
-          wget https://github.com/Loyalsoldier/geoip/raw/release/geoip.dat.sha256sum # 下载 geoip.dat 的校验文件
-
-      - name: Generate GFWList domains # 生成 GFWList 域名列表
-        run: |
-          cd gfwlist2dnsmasq || exit 1 # 进入 gfwlist2dnsmasq 目录
-          chmod +x ./gfwlist2dnsmasq.sh # 赋予脚本可执行权限
-          ./gfwlist2dnsmasq.sh -l -o ./temp-gfwlist.txt # 生成临时 GFWList 文件
-
-      - name: Get and add direct domains into temp-direct.txt file # 获取并添加直连域名到文件
-        run: |
-          curl -sSL $CHINA_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "$1\n"' > temp-direct.txt # 添加中国域名
-          curl -sSL ${CUSTOM_DIRECT} | perl -ne '/^(domain):([^:]+)(\n$|:@.+)/ && print "$2\n"' >> temp-direct.txt # 添加自定义直连域名
+          wget https://github.com/najloa/geoip/raw/release/geoip.dat # 下载 geoip.dat 文件
+          wget https://github.com/najloa/geoip/raw/release/geoip.dat.sha256sum # 下载 geoip.dat 的校验文件
 
       - name: Get and add proxy domains into temp-proxy.txt file # 获取并添加代理域名到文件
         run: |
-          #cat ./gfwlist2dnsmasq/temp-gfwlist.txt | perl -ne '/^((?=^.{3,255})[a-zA-Z0-9][-_a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-_a-zA-Z0-9]{0,62})+)/ && print "$1\n"' > temp-proxy.txt # 解析 GFWList 中的代理域名
-          #curl -sSL $GOOGLE_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "$1\n"' >> temp-proxy.txt # 添加 Google 域名
-          #curl -sSL $APPLE_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "$1\n"' >> temp-proxy.txt # 添加 Apple 域名
-          #curl -sSL ${CUSTOM_PROXY} | grep -Ev ":@cn" | perl -ne '/^(domain):([^:]+)(\n$|:@.+)/ && print "$2\n"' >> temp-proxy.txt # 添加自定义代理域名
           cat geolocation-!cn.txt | grep -Ev ":@cn" | perl -ne '/^(domain):([^:]+)(\n$|:@.+)/ && print "$2\n"' >> temp-proxy.txt # 添加自定义代理域名
-
-      - name: Get and add reject domains into temp-reject.txt file # 获取并添加拒绝域名到文件
-        run: |
-          curl -sSL $EASYLISTCHINA_EASYLIST_REJECT_URL | perl -ne '/^\|\|([-_0-9a-zA-Z]+(\.[-_0-9a-zA-Z]+){1,64})\^$/ && print "$1\n"' | perl -ne 'print if not /^[0-9]{1,3}(\.[0-9]{1,3}){3}$/' > temp-reject.txt # 添加 EasyList 拒绝规则
-          curl -sSL $ADGUARD_DNS_REJECT_URL | perl -ne '/^\|\|([-_0-9a-zA-Z]+(\.[-_0-9a-zA-Z]+){1,64})\^$/ && print "$1\n"' | perl -ne 'print if not /^[0-9]{1,3}(\.[0-9]{1,3}){3}$/' >> temp-reject.txt # 添加 AdGuard 拒绝规则
-          curl -sSL $PETERLOWE_REJECT_URL | perl -ne '/^127\.0\.0\.1\s([-_0-9a-zA-Z]+(\.[-_0-9a-zA-Z]+){1,64})$/ && print "$1\n"' >> temp-reject.txt # 添加 Peter Lowe 拒绝规则
-          curl -sSL $DANPOLLOCK_REJECT_URL | perl -ne '/^127\.0\.0\.1\s([-_0-9a-zA-Z]+(\.[-_0-9a-zA-Z]+){1,64})/ && print "$1\n"' | sed '1d' >> temp-reject.txt # 添加 Dan Pollock 拒绝规则
 
       - name: Reserve `full`, `regexp` and `keyword` type of rules from custom lists to "reserve" files # 从自定义规则中保留完整匹配、正则表达式和关键字类型规则
         run: |
-          curl -sSL ${CUSTOM_DIRECT} | perl -ne '/^((full|regexp|keyword):[^:]+)(\n$|:@.+)/ && print "$1\n"' | sort --ignore-case -u > direct-reserve.txt # 保留直连规则中的特殊规则
-          #curl -sSL ${CUSTOM_PROXY} | grep -Ev ":@cn" | perl -ne '/^((full|regexp|keyword):[^:]+)(\n$|:@.+)/ && print "$1\n"' | sort --ignore-case -u > proxy-reserve.txt # 保留代理规则中的特殊规则
           cat geolocation-!cn.txt | grep -Ev ":@cn" | perl -ne '/^((full|regexp|keyword):[^:]+)(\n$|:@.+)/ && print "$1\n"' | sort --ignore-case -u > proxy-reserve.txt # 保留代理规则中的特殊规则
 
       - name: Add proxy, direct and reject domains from "hidden" branch to appropriate temp files # 将 "hidden" 分支的域名添加到临时文件
         run: |
           cat proxy.txt >> temp-proxy.txt # 添加代理域名
-          cat direct.txt >> temp-direct.txt # 添加直连域名
-          cat reject.txt >> temp-reject.txt # 添加拒绝域名
 
       - name: Sort and generate redundant lists # 对列表进行排序并生成冗余列表
         run: |
           cat temp-proxy.txt | sort --ignore-case -u > proxy-list-with-redundant # 生成代理域名冗余列表
-          cat temp-direct.txt | sort --ignore-case -u > direct-list-with-redundant # 生成直连域名冗余列表
-          cat temp-reject.txt | sort --ignore-case -u > reject-list-with-redundant # 生成拒绝域名冗余列表
 
       - name: Remove redundant domains # 移除冗余域名
         run: |
@@ -136,47 +97,24 @@ jobs:
 
       - name: Write lists to data directory # 将列表写入数据目录
         run: |
-          cat temp-cn.txt | sort --ignore-case -u | perl -ne '/^((?=^.{1,255})[a-zA-Z0-9][-_a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-_a-zA-Z0-9]{0,62})*)/ && print "$1\n"' > ./community/data/cn # 写入直连域名
-          cat temp-cn.txt | sort --ignore-case -u | perl -ne 'print if not /^((?=^.{3,255})[a-zA-Z0-9][-_a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-_a-zA-Z0-9]{0,62})+)/' > direct-tld-list.txt # 写入顶级域名直连列表
           cat temp-geolocation-\!cn.txt | sort --ignore-case -u | perl -ne '/^((?=^.{1,255})[a-zA-Z0-9][-_a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-_a-zA-Z0-9]{0,62})*)/ && print "$1\n"' > ./community/data/geolocation-!cn # 写入代理域名
           cat temp-geolocation-\!cn.txt | sort --ignore-case -u | perl -ne 'print if not /^((?=^.{3,255})[a-zA-Z0-9][-_a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-_a-zA-Z0-9]{0,62})+)/' > proxy-tld-list.txt
-          cat temp-category-ads-all.txt | sort --ignore-case -u | perl -ne '/^((?=^.{1,255})[a-zA-Z0-9][-_a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-_a-zA-Z0-9]{0,62})*)/ && print "$1\n"' > ./community/data/category-ads-all # 写入拒绝域名
-          cat temp-category-ads-all.txt | sort --ignore-case -u | perl -ne 'print if not /^((?=^.{3,255})[a-zA-Z0-9][-_a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-_a-zA-Z0-9]{0,62})+)/' > reject-tld-list.txt
 
       - name: Add `full`, `regexp` and `keyword` type of rules back into "cn", "geolocation-!cn" and "category-ads-all" list # 将特殊规则重新添加到相应列表
         run: |
-          [ -f "direct-reserve.txt" ] && cat direct-reserve.txt >> ./community/data/cn # 添加直连规则的特殊规则
           [ -f "proxy-reserve.txt" ] && cat proxy-reserve.txt >> ./community/data/geolocation-\!cn # 添加代理规则的特殊规则
-          [ -f "reject-reserve.txt" ] && cat reject-reserve.txt >> ./community/data/category-ads-all # 添加拒绝规则的特殊规则
-          cp ./community/data/cn direct-list.txt # 备份直连列表
           cp ./community/data/geolocation-\!cn proxy-list.txt # 备份代理列表
-          cp ./community/data/category-ads-all reject-list.txt # 备份拒绝列表
 
       - name: Create `china-list`、`google-cn`、`apple-cn`、`gfw`、`greatfire` lists # 创建特殊域名列表
         run: |
-          curl -sSL $CHINA_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "$1\n"' > ./community/data/china-list # 创建中国域名列表
-          curl -sSL $CHINA_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "$1\n"' > china-list.txt
           curl -sSL $GOOGLE_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "full:$1\n"' > ./community/data/google-cn # 创建 Google 域名列表
           curl -sSL $GOOGLE_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "full:$1\n"' > google-cn.txt
           curl -sSL $APPLE_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "full:$1\n"' > ./community/data/apple-cn # 创建 Apple 域名列表
           curl -sSL $APPLE_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "full:$1\n"' > apple-cn.txt
-          cat ./gfwlist2dnsmasq/temp-gfwlist.txt | perl -ne '/^((?=^.{3,255})[a-zA-Z0-9][-_a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-_a-zA-Z0-9]{0,62})+)/ && print "$1\n"' >> ./community/data/gfw # 创建 GFWList
-          cat ./community/data/gfw | sort --ignore-case -u > gfw.txt
-          cat ./community/data/greatfire | sort --ignore-case -u > greatfire.txt # 创建 GreatFire 列表
-          curl -sSL $WIN_SPY | grep "0.0.0.0" | awk '{print $2}' > ./community/data/win-spy # 创建 Windows 间谍规则
-          curl -sSL $WIN_SPY | grep "0.0.0.0" | awk '{print $2}' > win-spy.txt
-          curl -sSL $WIN_UPDATE | grep "0.0.0.0" | awk '{print $2}' > ./community/data/win-update # 创建 Windows 更新规则
-          curl -sSL $WIN_UPDATE | grep "0.0.0.0" | awk '{print $2}' > win-update.txt
-          curl -sSL $WIN_EXTRA | grep "0.0.0.0" | awk '{print $2}' > ./community/data/win-extra # 创建 Windows 额外规则
-          curl -sSL $WIN_EXTRA | grep "0.0.0.0" | awk '{print $2}' > win-extra.txt
           : > ./community/data/category-scholar-uk
           : > ./community/data/tld-!cn
           : > ./community/data/geolocation-cn
           : > ./community/data/china-list
-          : > ./community/data/greatfire
-          : > ./community/data/win-spy
-          : > ./community/data/win-update
-          : > ./community/data/win-extra
           : > ./community/data/category-ads-all
           : > ./community/data/cn
 
@@ -190,11 +128,11 @@ jobs:
           install -Dp ./geoip.dat ./publish/geoip.dat # 移动 geoip.dat 文件到发布目录
           install -Dp ./geoip.dat.sha256sum ./publish/geoip.dat.sha256sum
           install -Dp ./custom/publish/geosite.dat ./publish/geosite.dat # 移动 geosite.dat 文件到发布目录
-          install -p {proxy,direct,reject}-tld-list.txt ./publish/ # 移动顶级域名列表
-          install -p {proxy,direct,reject}-list.txt ./publish/ # 移动域名列表
-          install -p {china-list,apple-cn,google-cn,gfw,greatfire,win-spy,win-update,win-extra}.txt ./publish/ # 移动特殊域名列表
+          install -p proxy-tld-list.txt ./publish/ # 移动顶级域名列表
+          install -p proxy-list.txt ./publish/ # 移动域名列表
+          install -p {apple-cn,google-cn}.txt ./publish/ # 移动特殊域名列表
           cd ./publish || exit 1 # 进入发布目录
-          zip rules.zip {proxy,direct,reject}-list.txt geoip.dat geosite.dat # 压缩文件为 rules.zip
+          zip rules.zip proxy-list.txt geoip.dat geosite.dat # 压缩文件为 rules.zip
           sha256sum geosite.dat > geosite.dat.sha256sum # 生成 geosite.dat 的校验值
           sha256sum rules.zip > rules.zip.sha256sum # 生成 rules.zip 的校验值
 
