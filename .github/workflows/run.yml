@@ -7,7 +7,6 @@ on:
   push: # 当推送到指定分支时触发
     branches:
       - master # 监听 master 分支
-      - hidden # 监听 hidden 分支
     paths-ignore: # 忽略以下路径的更改
       - "**/README.md" # 忽略 README.md 文件的更改
 
