@@ -84,7 +84,7 @@ jobs:
           #cat ./gfwlist2dnsmasq/temp-gfwlist.txt | perl -ne '/^((?=^.{3,255})[a-zA-Z0-9][-_a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-_a-zA-Z0-9]{0,62})+)/ && print "$1\n"' > temp-proxy.txt # 解析 GFWList 中的代理域名
           #curl -sSL $GOOGLE_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "$1\n"' >> temp-proxy.txt # 添加 Google 域名
           #curl -sSL $APPLE_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "$1\n"' >> temp-proxy.txt # 添加 Apple 域名
-          curl -sSL ${CUSTOM_PROXY} | grep -Ev ":@cn" | perl -ne '/^(domain):([^:]+)(\n$|:@.+)/ && print "$2\n"' >> temp-proxy.txt # 添加自定义代理域名
+          curl -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -sSL ${CUSTOM_PROXY} | grep -Ev ":@cn" | perl -ne '/^(domain):([^:]+)(\n$|:@.+)/ && print "$2\n"' >> temp-proxy.txt # 添加自定义代理域名
 
       - name: Get and add reject domains into temp-reject.txt file # 获取并添加拒绝域名到文件
         run: |
@@ -96,7 +96,7 @@ jobs:
       - name: Reserve `full`, `regexp` and `keyword` type of rules from custom lists to "reserve" files # 从自定义规则中保留完整匹配、正则表达式和关键字类型规则
         run: |
           curl -sSL ${CUSTOM_DIRECT} | perl -ne '/^((full|regexp|keyword):[^:]+)(\n$|:@.+)/ && print "$1\n"' | sort --ignore-case -u > direct-reserve.txt # 保留直连规则中的特殊规则
-          curl -sSL ${CUSTOM_PROXY} | grep -Ev ":@cn" | perl -ne '/^((full|regexp|keyword):[^:]+)(\n$|:@.+)/ && print "$1\n"' | sort --ignore-case -u > proxy-reserve.txt # 保留代理规则中的特殊规则
+          curl -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -sSL ${CUSTOM_PROXY} | grep -Ev ":@cn" | perl -ne '/^((full|regexp|keyword):[^:]+)(\n$|:@.+)/ && print "$1\n"' | sort --ignore-case -u > proxy-reserve.txt # 保留代理规则中的特殊规则
 
       - name: Add proxy, direct and reject domains from "hidden" branch to appropriate temp files # 将 "hidden" 分支的域名添加到临时文件
         run: |
