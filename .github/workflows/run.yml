@@ -89,7 +89,7 @@ jobs:
           curl -sSL $GOOGLE_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "$1\n"' >> temp-proxy.txt
           curl -sSL $APPLE_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "$1\n"' >> temp-proxy.txt
           #curl -sSL ${CUSTOM_PROXY} | grep -Ev ":@cn" | perl -ne '/^(domain):([^:]+)(\n$|:@.+)/ && print "$2\n"' >> temp-proxy.txt
-          grep -Ev ":@cn" './main/geolocation-!cn' | perl -ne '/^(domain):([^:]+)(\n$|:@.+)/ && print "$2\n"' > temp-proxy.txt
+          cp ./main/geolocation-!cn temp-proxy.txt
 
       - name: Get and add reject domains into temp-reject.txt file
         run: |
