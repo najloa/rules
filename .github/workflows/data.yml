@@ -5,6 +5,13 @@ on:
   schedule:
     - cron: '0 21 * * *'  # 每天执行，可修改
 
+  push:
+    branches:
+      - main
+      - hidden
+    paths-ignore:
+      - "**/README.md"
+      - "**/merged_output.txt"
 jobs:
   merge-and-push:
     runs-on: ubuntu-latest
