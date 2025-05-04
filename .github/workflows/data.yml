@@ -93,29 +93,21 @@ jobs:
           ' "$OUTPUT_RAW" | sort -u > publish/merged_output.txt
           ls -la publish/
 
-      - name: Set up Git
+      - name: Commit and push merged_output.txt
         run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
+          cp publish/merged_output.txt .
 
-      - name: Checkout hidden branch or create it
-        run: |
-          if git fetch origin hidden; then
-            git checkout hidden
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add merged_output.txt
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
           else
-            git checkout --orphan hidden
-            git reset
+            git commit -m "Auto update merged_output.txt"
+            git push origin main
           fi
-
-      - name: Copy merged file and commit changes
-        run: |
-          cp publish/merged_hidden.txt ./
-          git add ./merged_hidden.txt
-          git diff --cached --quiet || git commit -m "Update merged domain list $(date +'%Y-%m-%d %H:%M')"
-
-      - name: Push to remote hidden branch
-        run: |
-          git push origin hidden --force
 
       - name: Delete workflow runs
         uses: Mattraks/delete-workflow-runs@main
