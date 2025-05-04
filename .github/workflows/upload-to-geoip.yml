@@ -6,29 +6,34 @@ on:
       tag:
         description: "Tag name of the release to sync"
         required: true
-      files:
-        description: "Comma-separated list of files to upload (e.g. a.zip,b.tar.gz)"
-        required: true
 
 jobs:
-  manual-upload:
+  upload:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download release assets from private repo
-        uses: dsaltares/fetch-gh-release-asset@v1.1.0
-        with:
-          repo: ${{ github.repository }}
-          tag: ${{ github.event.inputs.tag }}
-          file: "*"
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install GitHub CLI
+        run: sudo apt-get install -y gh
 
-      - name: Upload to public repo najloa/geoip
+      - name: Authenticate gh CLI
+        run: gh auth login --with-token <<< "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Download release assets from private repo
+        run: |
+          mkdir release_assets
+          cd release_assets
+          gh release download "${{ github.event.inputs.tag }}" \
+            --repo "${{ github.repository }}" \
+            --pattern "*" \
+            --clobber
+
+      - name: Upload assets to najloa/geoip
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.event.inputs.tag }}
           name: "Synced from private repo"
-          body: "Manual sync of release assets from private repo"
+          body: "Manual sync from private repo"
           token: ${{ secrets.PUBLIC_REPO_TOKEN }}
           repository: najloa/geoip
-          files: ${{ join(fromJson(format('["{0}"]', github.event.inputs.files)), '\n') }}
+          files: |
+            release_assets/*
