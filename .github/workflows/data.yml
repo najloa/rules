@@ -102,7 +102,7 @@ jobs:
           git add merged_output.txt
           git commit -m "${{ env.RELEASE_NAME }}"
           git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
-          git push -f -u origin 
+          git push -f -u origin hidden
 
       - name: Delete workflow runs
         uses: Mattraks/delete-workflow-runs@main
