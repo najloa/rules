@@ -92,17 +92,29 @@ jobs:
             }
           ' "$OUTPUT_RAW" | sort -u > publish/merged_output.txt
 
-      - name: 设置 Git 用户
+      - name: Set up Git
         run: |
-          git config --global user.name "GitHub Actions Bot"
-          git config --global user.email "actions@github.com"
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
 
-      - name: Commit and push merged_output.txt
+      - name: Checkout hidden branch or create it
         run: |
-          git add merged_output.txt
-          git commit -m "${{ env.RELEASE_NAME }}"
-          git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
-          git push -f -u origin hidden
+          if git fetch origin hidden; then
+            git checkout hidden
+          else
+            git checkout --orphan hidden
+            git reset
+          fi
+
+      - name: Copy merged file and commit changes
+        run: |
+          cp publish/merged_hidden.txt ./
+          git add ./merged_hidden.txt
+          git diff --cached --quiet || git commit -m "Update merged domain list $(date +'%Y-%m-%d %H:%M')"
+
+      - name: Push to remote hidden branch
+        run: |
+          git push origin hidden --force
 
       - name: Delete workflow runs
         uses: Mattraks/delete-workflow-runs@main
