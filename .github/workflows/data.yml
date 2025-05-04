@@ -105,7 +105,7 @@ jobs:
             echo "No changes to commit."
           else
             git commit -m "Auto update merged_output.txt"
-            git push origin release --tags
+            git push -f -u origin release
           fi
 
       - name: Delete workflow runs
