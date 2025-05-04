@@ -1,11 +1,8 @@
-name: Manual Upload to geoip
+name: Auto Sync Release to geoip
 
 on:
-  workflow_dispatch:
-    inputs:
-      tag:
-        description: "Tag name of the release to sync"
-        required: true
+  release:
+    types: [published]
 
 jobs:
   upload:
@@ -22,7 +19,7 @@ jobs:
         run: |
           mkdir release_assets
           cd release_assets
-          gh release download "${{ github.event.inputs.tag }}" \
+          gh release download "${{ github.event.release.tag_name }}" \
             --repo "${{ github.repository }}" \
             --pattern "*" \
             --clobber
@@ -30,9 +27,9 @@ jobs:
       - name: Upload assets to najloa/geoip
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.event.inputs.tag }}
-          name: "Synced from private repo"
-          body: "Manual sync from private repo"
+          tag_name: ${{ github.event.release.tag_name }}
+          name: ${{ github.event.release.name }}
+          body: ${{ github.event.release.body }}
           token: ${{ secrets.PUBLIC_REPO_TOKEN }}
           repository: najloa/geoip
           files: |
