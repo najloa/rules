@@ -37,7 +37,7 @@ jobs:
           declare -A deletecnmap
 
           # ⬇️ 配置你的合并源文件
-          FILES=("google" "openai" "github" "twitch" "yandex" "tiktok" "vimeo" "reddit" "meta" "x" "telegram" "demonoid" "piratebay" "btdig" "theguardian" "nyaa" "jwplayer" "nytimes" "cnn" "pikpak" "category-vpnservices" "pixiv" "1337x" "dailymail" "rarbg" "dmm" "vk" "appledaily" "z-library" "netflix" "bbc" "ft" "bloomberg" "newscorp" "yahoo" "fox" "category-public-tracker" "category-porn" "category-forums" "4plebs" "category-anticensorship" "mega" "bluesky" "linkedin" "primevideo" "soundcloud" "niconico" "bandcamp") # 👈 入口文件名
+          FILES=("category-media" "google" "openai" "github" "twitch" "yandex" "tiktok" "vimeo" "reddit" "meta" "x" "telegram" "demonoid" "piratebay" "btdig" "nyaa" "jwplayer" "pikpak" "category-vpnservices" "pixiv" "1337x" "rarbg" "dmm" "vk" "z-library" "netflix" "yahoo" "category-public-tracker" "category-porn" "category-forums" "4plebs" "category-anticensorship" "mega" "bluesky" "linkedin" "primevideo" "soundcloud" "niconico" "bandcamp") # 👈 入口文件名
           deletecn=("linkedin" "digicert" "epicgames" "apple-pki" "microsoft" "ubisoft" "xbox" "bing" "steam" "apple")  # 这些文件中含 @cn 的行将被整行删除
 
           # 构建 deletecn 快速查找表
