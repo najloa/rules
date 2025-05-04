@@ -165,6 +165,7 @@ jobs:
 
       - name: Build geosite.dat file
         run: |
+          ls
           : > ./community/data/category-scholar-uk
           : > ./community/data/tld-!cn
           : > ./community/data/geolocation-cn
