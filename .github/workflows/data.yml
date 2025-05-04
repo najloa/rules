@@ -100,3 +100,17 @@ jobs:
             git commit -m "Auto update merged_output.txt"
             git push origin main
           fi
+
+      - name: Delete workflow runs
+        uses: Mattraks/delete-workflow-runs@main
+        with:
+          retain_days: 0
+          keep_minimum_runs: 1
+
+      - name: Remove old Releases
+        uses: dev-drprasad/delete-older-releases@master
+        with:
+          keep_latest: 1
+          delete_tags: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
