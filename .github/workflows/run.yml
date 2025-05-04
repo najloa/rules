@@ -79,7 +79,7 @@ jobs:
 
       - name: Get and add proxy domains into temp-proxy.txt file
         run: |
-          curl https://github.com/najloa/v2ray-rules-dat/raw/refs/heads/main/merged_output.txt
+          curl -O https://raw.githubusercontent.com/najloa/v2ray-rules-dat/refs/heads/main/merged_output.txt?token=GHSAT0AAAAAACUWO22INKZ7TAAC357NLKHO2AXE3FA
           cp ./merged_output.txt ./temp-proxy.txt
 
       - name: Get and add reject domains into temp-reject.txt file
