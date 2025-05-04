@@ -1,0 +1,59 @@
+name: v2fly domain-list-community
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 2 * * *'  # 每天 UTC 时间 02:00 运行，可按需调整
+
+jobs:
+  merge-and-push:
+    runs-on: ubuntu-latest
+
+    env:
+      DOMAIN_LIST_REPO: https://github.com/v2fly/domain-list-community.git
+      DOMAIN_LIST_DIR: domain-list-community
+      FILES_TO_MERGE: |
+        google
+        facebook
+        twitter
+
+    steps:
+      - name: Checkout current repository
+        uses: actions/checkout@v3
+
+      - name: Set up Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Clone domain-list-community
+        run: |
+          git clone --depth=1 "$DOMAIN_LIST_REPO" "$DOMAIN_LIST_DIR"
+
+      - name: Merge domain list files
+        run: |
+          mkdir -p output
+          > output/merged_output.txt
+
+          for name in $FILES_TO_MERGE; do
+            file="$DOMAIN_LIST_DIR/data/$name"
+            if [ -f "$file" ]; then
+              echo "# Start of $name" >> output/merged_output.txt
+              cat "$file" >> output/merged_output.txt
+              echo -e "\n# End of $name\n" >> output/merged_output.txt
+            else
+              echo "::warning:: File $file not found!"
+            fi
+          done
+
+      - name: Commit and push changes
+        run: |
+          cp output/merged_output.txt .
+          git add merged_output.txt
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Update merged_output.txt [auto]"
+            git push
+          fi
