@@ -275,6 +275,8 @@ jobs:
           release_name: ${{ env.RELEASE_NAME }}
           tag: ${{ env.TAG_NAME }}
           file_glob: true
+          draft: false  # 确保设置为 false，发布非草稿 Release
+          prerelease: false  # 如果不需要标记为预发布，设置为 false
           file: ./publish/*
 
       - name: Git push assets to "release" branch
