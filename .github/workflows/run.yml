@@ -166,6 +166,16 @@ jobs:
 
       - name: Build geosite.dat file
         run: |
+          : > ./community/data/category-scholar-uk
+          : > ./community/data/tld-!cn
+          : > ./community/data/geolocation-cn
+          : > ./community/data/china-list
+          : > ./community/data/greatfire
+          : > ./community/data/win-spy
+          : > ./community/data/win-update
+          : > ./community/data/win-extra
+          : > ./community/data/category-ads-all
+          : > ./community/data/cn
           cd custom || exit 1
           go run ./ --datapath=../community/data
 
