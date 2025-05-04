@@ -1,59 +1,53 @@
-name: v2fly domain-list-community
+name: Merge domain files to main
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 2 * * *'  # 每天 UTC 时间 02:00 运行，可按需调整
+    - cron: '0 2 * * *'
 
 jobs:
-  merge-and-push:
+  merge-and-commit:
     runs-on: ubuntu-latest
-
-    env:
-      DOMAIN_LIST_REPO: https://github.com/v2fly/domain-list-community.git
-      DOMAIN_LIST_DIR: domain-list-community
-      FILES_TO_MERGE: |
-        google
-        facebook
-        twitter
 
     steps:
       - name: Checkout current repository
         uses: actions/checkout@v3
-
-      - name: Set up Git
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        with:
+          ref: main
 
       - name: Clone domain-list-community
         run: |
-          git clone --depth=1 "$DOMAIN_LIST_REPO" "$DOMAIN_LIST_DIR"
+          git clone --depth=1 https://github.com/v2fly/domain-list-community.git
 
-      - name: Merge domain list files
+      - name: Merge selected files into merged_output.txt
         run: |
-          mkdir -p output
-          > output/merged_output.txt
+          mkdir -p publish
+          FILES=("google" "facebook" "twitter")  # ← 修改为你需要的文件名
+          > publish/merged_output.txt
 
-          for name in $FILES_TO_MERGE; do
-            file="$DOMAIN_LIST_DIR/data/$name"
-            if [ -f "$file" ]; then
-              echo "# Start of $name" >> output/merged_output.txt
-              cat "$file" >> output/merged_output.txt
-              echo -e "\n# End of $name\n" >> output/merged_output.txt
+          for file in "${FILES[@]}"; do
+            path="domain-list-community/data/$file"
+            if [ -f "$path" ]; then
+              echo "# --- Start of $file ---" >> publish/merged_output.txt
+              cat "$path" >> publish/merged_output.txt
+              echo -e "\n# --- End of $file ---\n" >> publish/merged_output.txt
             else
-              echo "::warning:: File $file not found!"
+              echo "::warning:: Missing file: $path"
             fi
           done
 
-      - name: Commit and push changes
+      - name: Commit and push merged_output.txt to main
         run: |
-          cp output/merged_output.txt .
+          cp publish/merged_output.txt .
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
           git add merged_output.txt
 
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "Update merged_output.txt [auto]"
-            git push
+            git commit -m "Auto update merged_output.txt"
+            git push origin main
           fi
