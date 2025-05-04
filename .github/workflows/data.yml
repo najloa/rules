@@ -1,12 +1,12 @@
-name: Merge domain files to main
+name: Merge domain list and push
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 2 * * *'  # 每天凌晨执行，可修改
+    - cron: '0 2 * * *'  # 每天执行，可修改
 
 jobs:
-  merge-and-commit:
+  merge-and-push:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,7 +19,7 @@ jobs:
         run: |
           git clone --depth=1 https://github.com/v2fly/domain-list-community.git
 
-      - name: Merge selected files with include support
+      - name: Merge and clean domain files
         run: |
           mkdir -p publish
           DATA_DIR="domain-list-community/data"
@@ -27,13 +27,20 @@ jobs:
           > "$OUTPUT_RAW"
 
           declare -A processed
+          declare -A deletecnmap
+
+          # ⬇️ 配置你的合并源文件
+          FILES=("google" "openai" "github" "twitch" "yandex" "tiktok" "vimeo" "reddit" "meta" "x" "telegram" "demonoid" "piratebay" "btdig" "theguardian" "nyaa" "jwplayer" "nytimes" "cnn" "pikpak" "category-vpnservices" "pixiv" "1337x" "dailymail" "rarbg" "dmm" "vk" "appledaily" "z-library" "netflix" "bbc" "ft" "bloomberg" "newscorp" "yahoo" "fox" "category-public-tracker" "category-porn" "category-forums" "4plebs" "category-anticensorship" "mega" "bluesky" "linkedin" "primevideo" "soundcloud" "niconico" "bandcamp") # 👈 入口文件名
+          deletecn=("linkedin" "digicert" "epicgames" "apple-pki" "microsoft" "ubisoft" "xbox" "bing" "steam" "apple")  # 这些文件中含 @cn 的行将被整行删除
+
+          # 构建 deletecn 快速查找表
+          for dfile in "${deletecn[@]}"; do
+            deletecnmap[$dfile]=1
+          done
 
           process_file() {
             local name="$1"
-
-            if [[ -n "${processed[$name]}" ]]; then
-              return 0
-            fi
+            if [[ -n "${processed[$name]}" ]]; then return 0; fi
             processed[$name]=1
 
             local path="$DATA_DIR/$name"
@@ -42,35 +49,43 @@ jobs:
               return 0
             fi
 
+            local temp_clean="/tmp/cleaned_$name.txt"
+            > "$temp_clean"
+
             while IFS= read -r line || [[ -n "$line" ]]; do
               if [[ "$line" =~ ^include:([a-zA-Z0-9._-]+)$ ]]; then
                 include_name="${BASH_REMATCH[1]}"
                 process_file "$include_name"
               else
-                echo "$line" >> "$OUTPUT_RAW"
+                # 删除 @cn 行（仅对指定文件）
+                if [[ -n "${deletecnmap[$name]}" && "$line" == *@cn* ]]; then
+                  continue
+                fi
+                echo "$line" >> "$temp_clean"
               fi
             done < "$path"
-          }
 
-          # Entry point file(s)
-          FILES=("google")  # 👈 入口文件名
+            cat "$temp_clean" >> "$OUTPUT_RAW"
+            rm -f "$temp_clean"
+          }
 
           for file in "${FILES[@]}"; do
             process_file "$file"
           done
 
-          # Clean and format final output
+          # ⬇️ 清洗输出：去空行、注释、@后内容、空格，排序去重
           awk '
-            /^[[:space:]]*$/ { next }             # Skip empty lines
-            /^[[:space:]]*#/ { next }             # Skip full-line comments
+            /^[[:space:]]*$/ { next }
+            /^[[:space:]]*#/ { next }
             {
-              sub(/[[:space:]]*#.*$/, "")         # Remove inline comments
-              gsub(/[[:space:]]+/, "")            # Remove all whitespace
+              sub(/[[:space:]]*#.*$/, "")
+              sub(/@.*/, "")
+              gsub(/[[:space:]]+/, "")
               print
             }
           ' "$OUTPUT_RAW" | sort -u > publish/merged_output.txt
 
-      - name: Commit and push merged_output.txt to main
+      - name: Commit and push merged_output.txt
         run: |
           cp publish/merged_output.txt .
 
