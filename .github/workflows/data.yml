@@ -3,7 +3,7 @@ name: Merge domain files to main
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 2 * * *'
+    - cron: '0 2 * * *'  # 每天运行，可根据需要修改
 
 jobs:
   merge-and-commit:
@@ -22,19 +22,30 @@ jobs:
       - name: Merge selected files into merged_output.txt
         run: |
           mkdir -p publish
-          FILES=("google" "facebook" "twitter")  # ← 修改为你需要的文件名
-          > publish/merged_output.txt
+          FILES=("google" "facebook" "twitter")  # ← 修改为你想合并的文件
+          > publish/merged_output_raw.txt
 
           for file in "${FILES[@]}"; do
             path="domain-list-community/data/$file"
             if [ -f "$path" ]; then
-              echo "# --- Start of $file ---" >> publish/merged_output.txt
-              cat "$path" >> publish/merged_output.txt
-              echo -e "\n# --- End of $file ---\n" >> publish/merged_output.txt
+              cat "$path" >> publish/merged_output_raw.txt
+              echo >> publish/merged_output_raw.txt
             else
               echo "::warning:: Missing file: $path"
             fi
           done
+
+      - name: Clean merged_output.txt (strip comments, empty lines)
+        run: |
+          awk '
+            /^[[:space:]]*$/ { next }             # 跳过空行
+            /^[[:space:]]*#/ { next }             # 跳过注释行
+            {
+              sub(/[[:space:]]*#.*$/, "")         # 去掉尾部注释
+              gsub(/[[:space:]]+/, "")            # 去掉所有空白字符（可选）
+              print
+            }
+          ' publish/merged_output_raw.txt > publish/merged_output.txt
 
       - name: Commit and push merged_output.txt to main
         run: |
