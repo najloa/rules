@@ -8,6 +8,7 @@ on:
       - main
     paths-ignore:
       - "**/README.md"
+      - "**/data.yml"
 jobs:
   build:
     runs-on: ubuntu-latest
