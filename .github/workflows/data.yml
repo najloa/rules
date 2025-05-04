@@ -94,11 +94,6 @@ jobs:
 
       - name: Commit and push merged_output.txt
         run: |
-          cp publish/merged_output.txt .
-
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
           git add merged_output.txt
           git commit -m "${{ env.RELEASE_NAME }}"
           git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
