@@ -102,7 +102,7 @@ jobs:
         run: |
           curl -sSL ${CUSTOM_DIRECT} | perl -ne '/^((full|regexp|keyword):[^:]+)(\n$|:@.+)/ && print "$1\n"' | sort --ignore-case -u > direct-reserve.txt
           #curl -sSL ${CUSTOM_PROXY} | grep -Ev ":@cn" | perl -ne '/^((full|regexp|keyword):[^:]+)(\n$|:@.+)/ && print "$1\n"' | sort --ignore-case -u > proxy-reserve.txt
-          grep -Ev ":@cn" './main/geolocation-!cn' | perl -ne '/^((full|regexp|keyword):[^:]+)(\n$|:@.+)/ && print "$1\n"' | sort --ignore-case -u > proxy-reserve.txt
+          #grep -Ev ":@cn" './main/geolocation-!cn' | perl -ne '/^((full|regexp|keyword):[^:]+)(\n$|:@.+)/ && print "$1\n"' | sort --ignore-case -u > proxy-reserve.txt
 
       - name: Add proxy, direct and reject domains from "hidden" branch to appropriate temp files
         run: |
@@ -142,7 +142,8 @@ jobs:
         run: |
           cat temp-cn.txt | sort --ignore-case -u | perl -ne '/^((?=^.{1,255})[a-zA-Z0-9][-_a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-_a-zA-Z0-9]{0,62})*)/ && print "$1\n"' > ./community/data/cn
           cat temp-cn.txt | sort --ignore-case -u | perl -ne 'print if not /^((?=^.{3,255})[a-zA-Z0-9][-_a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-_a-zA-Z0-9]{0,62})+)/' > direct-tld-list.txt
-          cat temp-geolocation-\!cn.txt | sort --ignore-case -u | perl -ne '/^((?=^.{1,255})[a-zA-Z0-9][-_a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-_a-zA-Z0-9]{0,62})*)/ && print "$1\n"' > ./community/data/geolocation-\!cn
+          #cat temp-geolocation-\!cn.txt | sort --ignore-case -u | perl -ne '/^((?=^.{1,255})[a-zA-Z0-9][-_a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-_a-zA-Z0-9]{0,62})*)/ && print "$1\n"' > ./community/data/geolocation-\!cn
+          cat temp-geolocation-\!cn.txt > ./community/data/geolocation-\!cn
           cat temp-geolocation-\!cn.txt | sort --ignore-case -u | perl -ne 'print if not /^((?=^.{3,255})[a-zA-Z0-9][-_a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-_a-zA-Z0-9]{0,62})+)/' > proxy-tld-list.txt
           cat temp-category-ads-all.txt | sort --ignore-case -u | perl -ne '/^((?=^.{1,255})[a-zA-Z0-9][-_a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-_a-zA-Z0-9]{0,62})*)/ && print "$1\n"' > ./community/data/category-ads-all
           cat temp-category-ads-all.txt | sort --ignore-case -u | perl -ne 'print if not /^((?=^.{3,255})[a-zA-Z0-9][-_a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-_a-zA-Z0-9]{0,62})+)/' > reject-tld-list.txt
@@ -150,7 +151,8 @@ jobs:
       - name: Add `full`, `regexp` and `keyword` type of rules back into "cn", "geolocation-!cn" and "category-ads-all" list
         run: |
           [ -f "direct-reserve.txt" ] && cat direct-reserve.txt >> ./community/data/cn
-          [ -f "proxy-reserve.txt" ] && cat proxy-reserve.txt >> ./community/data/geolocation-\!cn
+          #[ -f "proxy-reserve.txt" ] && cat proxy-reserve.txt >> ./community/data/geolocation-\!cn
+          cp ./community/data/geolocation-\!cn proxy2-list.txt
           [ -f "reject-reserve.txt" ] && cat reject-reserve.txt >> ./community/data/category-ads-all
           cp ./community/data/cn direct-list.txt
           cp ./community/data/geolocation-\!cn proxy-list.txt
@@ -186,6 +188,69 @@ jobs:
           : > ./community/data/win-extra
           : > ./community/data/category-ads-all
           : > ./community/data/cn
+          : > ./community/data/apple
+          : > ./community/data/category-game-platforms-download
+          : > ./community/data/beats
+          : > ./community/data/autodesk
+          : > ./community/data/qcloud
+          : > ./community/data/bmw
+          : > ./community/data/huaweicloud
+          : > ./community/data/category-scholar-!cn
+          : > ./community/data/ebay
+          : > ./community/data/bytedance
+          : > ./community/data/category-gov-ru
+          : > ./community/data/adobe-activation
+          : > ./community/data/paypal
+          : > ./community/data/mastercard
+          : > ./community/data/baidu-ads
+          : > ./community/data/jd
+          : > ./community/data/intel
+          : > ./community/data/ea
+          : > ./community/data/category-bank-jp
+          : > ./community/data/mini
+          : > ./community/data/volvo
+          : > ./community/data/nike
+          : > ./community/data/azure
+          : > ./community/data/category-ads
+          : > ./community/data/hp
+          : > ./community/data/alibaba
+          : > ./community/data/alibaba-ads
+          : > ./community/data/nintendo
+          : > ./community/data/visa
+          : > ./community/data/att
+          : > ./community/data/category-emby
+          : > ./community/data/category-securities-cn
+          : > ./community/data/category-scholar-cn
+          : > ./community/data/category-dev
+          : > ./community/data/adobe
+          : > ./community/data/volcengine
+          : > ./community/data/bridgestone
+          : > ./community/data/feishu
+          : > ./community/data/category-bank-cn
+          : > ./community/data/vmware
+          : > ./community/data/lark-global
+          : > ./community/data/tencent-games
+          : > ./community/data/cisco
+          : > ./community/data/category-ntp
+          : > ./community/data/thescoregroup
+          : > ./community/data/pearson
+          : > ./community/data/category-media-ru
+          : > ./community/data/sina-ads
+          : > ./community/data/category-companies
+          : > ./community/data/category-game-accelerator-cn
+          : > ./community/data/bestbuy
+          : > ./community/data/category-entertainment
+          : > ./community/data/category-pt
+          : > ./community/data/category-education-cn
+          : > ./community/data/category-httpdns-cn
+          : > ./community/data/category-ntp-jp
+          : > ./community/data/aliyun
+          : > ./community/data/verisign-pki
+          : > ./community/data/sony
+          : > ./community/data/category-media-cn
+          : > ./community/data/lenovo
+          : > ./community/data/blogspot
+          : > ./community/data/starbucks
           cd custom || exit 1
           go run ./ --datapath=../community/data
 
