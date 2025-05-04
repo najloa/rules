@@ -94,20 +94,14 @@ jobs:
 
       - name: Commit and push merged_output.txt
         run: |
-          cp publish/merged_output.txt .
-
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          git checkout -b hidden
+          mkdir -p /tmp/safe_dir
+          mv merged_output.txt /tmp/safe_dir/
+          git fetch origin hidden
+          git checkout -b hidden origin/hidden
+          mv /tmp/safe_dir/merged_output.txt .
           git add merged_output.txt
-
-          if git diff --cached --quiet; then
-            echo "No changes to commit."
-          else
-            git commit -m "Auto update merged_output.txt"
-            git push -u origin hidden
-          fi
+          git commit -m "Add merged_output.txt to hidden branch"
+          git push origin hidden
 
       - name: Delete workflow runs
         uses: Mattraks/delete-workflow-runs@main
