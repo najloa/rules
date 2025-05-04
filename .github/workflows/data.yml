@@ -3,7 +3,7 @@ name: Merge domain files to main
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 2 * * *'  # 每天运行，可根据需要修改
+    - cron: '0 2 * * *'  # 每天凌晨执行，可修改
 
 jobs:
   merge-and-commit:
@@ -19,33 +19,56 @@ jobs:
         run: |
           git clone --depth=1 https://github.com/v2fly/domain-list-community.git
 
-      - name: Merge selected files into merged_output.txt
+      - name: Merge selected files with include support
         run: |
           mkdir -p publish
-          FILES=("google" "facebook" "twitter")  # ← 修改为你想合并的文件
-          > publish/merged_output_raw.txt
+          DATA_DIR="domain-list-community/data"
+          OUTPUT_RAW="publish/merged_output_raw.txt"
+          > "$OUTPUT_RAW"
+
+          declare -A processed
+
+          process_file() {
+            local name="$1"
+
+            if [[ -n "${processed[$name]}" ]]; then
+              return 0
+            fi
+            processed[$name]=1
+
+            local path="$DATA_DIR/$name"
+            if [[ ! -f "$path" ]]; then
+              echo "::warning:: Skipping missing file: $path"
+              return 0
+            fi
+
+            while IFS= read -r line || [[ -n "$line" ]]; do
+              if [[ "$line" =~ ^include:([a-zA-Z0-9._-]+)$ ]]; then
+                include_name="${BASH_REMATCH[1]}"
+                process_file "$include_name"
+              else
+                echo "$line" >> "$OUTPUT_RAW"
+              fi
+            done < "$path"
+          }
+
+          # Entry point file(s)
+          FILES=("google")  # 👈 入口文件名
 
           for file in "${FILES[@]}"; do
-            path="domain-list-community/data/$file"
-            if [ -f "$path" ]; then
-              cat "$path" >> publish/merged_output_raw.txt
-              echo >> publish/merged_output_raw.txt
-            else
-              echo "::warning:: Missing file: $path"
-            fi
+            process_file "$file"
           done
 
-      - name: Clean merged_output.txt (strip comments, empty lines)
-        run: |
+          # Clean and format final output
           awk '
-            /^[[:space:]]*$/ { next }             # 跳过空行
-            /^[[:space:]]*#/ { next }             # 跳过注释行
+            /^[[:space:]]*$/ { next }             # Skip empty lines
+            /^[[:space:]]*#/ { next }             # Skip full-line comments
             {
-              sub(/[[:space:]]*#.*$/, "")         # 去掉尾部注释
-              #gsub(/[[:space:]]+/, "")            # 去掉所有空白字符（可选）
+              sub(/[[:space:]]*#.*$/, "")         # Remove inline comments
+              gsub(/[[:space:]]+/, "")            # Remove all whitespace
               print
             }
-          ' publish/merged_output_raw.txt > publish/merged_output.txt
+          ' "$OUTPUT_RAW" | sort -u > publish/merged_output.txt
 
       - name: Commit and push merged_output.txt to main
         run: |
