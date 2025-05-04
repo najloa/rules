@@ -2,13 +2,18 @@ name: Auto Sync Release to geoip
 
 on:
   release:
-    types: [published]
+    types: [published]  # 确保监听 `published` 事件
 
 jobs:
   upload:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Debug release info
+        run: |
+          echo "Release tag: ${{ github.event.release.tag_name }}"
+          echo "Release name: ${{ github.event.release.name }}"
+
       - name: Install GitHub CLI
         run: sudo apt-get install -y gh
 
