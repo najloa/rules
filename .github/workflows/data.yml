@@ -99,6 +99,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
+          git checkout -b release
           git add merged_output.txt
 
           if git diff --cached --quiet; then
