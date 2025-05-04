@@ -91,6 +91,7 @@ jobs:
               print
             }
           ' "$OUTPUT_RAW" | sort -u > publish/merged_output.txt
+          ls -la publish/
 
       - name: Set up Git
         run: |
