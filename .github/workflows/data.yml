@@ -3,7 +3,7 @@ name: Merge domain list and push
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 2 * * *'  # 每天执行，可修改
+    - cron: '0 21 * * *'  # 每天执行，可修改
 
 jobs:
   merge-and-push:
