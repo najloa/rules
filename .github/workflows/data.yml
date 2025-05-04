@@ -42,7 +42,7 @@ jobs:
             /^[[:space:]]*#/ { next }             # 跳过注释行
             {
               sub(/[[:space:]]*#.*$/, "")         # 去掉尾部注释
-              gsub(/[[:space:]]+/, "")            # 去掉所有空白字符（可选）
+              #gsub(/[[:space:]]+/, "")            # 去掉所有空白字符（可选）
               print
             }
           ' publish/merged_output_raw.txt > publish/merged_output.txt
