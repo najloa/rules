@@ -9,8 +9,6 @@ on:
       - hidden
     paths-ignore:
       - "**/README.md"
-      - "**/data.yml"
-      - "**/upload-to-geoip.yml"
 jobs:
   build:
     runs-on: ubuntu-latest
