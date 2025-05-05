@@ -3,16 +3,10 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "0 22 * * *"
-  #push:
-  #  branches:
-  #    - main
-  pull_request:
+  push:
     branches:
       - main
-      - 'main/hidden'
-      - 'hidden'
-    #paths-ignore:
-    #  - "**/README.md"
+      - 'hidden/**'
 jobs:
   build:
     runs-on: ubuntu-latest
