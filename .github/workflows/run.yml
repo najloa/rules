@@ -3,12 +3,14 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "0 22 * * *"
-  push:
-    branches:
-      - main
+  #push:
+  #  branches:
+  #    - main
   pull_request:
     branches:
-      - hidden
+      - main
+      - 'main/hidden'
+      - 'hidden'
     #paths-ignore:
     #  - "**/README.md"
 jobs:
