@@ -6,6 +6,8 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
       - hidden
     #paths-ignore:
     #  - "**/README.md"
