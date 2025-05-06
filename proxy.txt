@@ -1,3 +1,4 @@
+gravatar.com
 novaxns.one
 linux.do
 nodeseek.com
