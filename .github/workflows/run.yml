@@ -32,16 +32,10 @@ jobs:
           echo "WIN_EXTRA=https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/extra.txt" >> $GITHUB_ENV
         shell: bash
 
-      - name: Checkout the "hidden" branch of this repo
-        uses: actions/checkout@v4
-        with:
-          ref: hidden
-
       - name: Checkout the "main" branch of this repo
         uses: actions/checkout@v4
         with:
           ref: main
-          path: main
 
       - name: Checkout Loyalsoldier/domain-list-custom
         uses: actions/checkout@v4
@@ -89,7 +83,7 @@ jobs:
           curl -sSL $GOOGLE_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "$1\n"' >> temp-proxy.txt
           curl -sSL $APPLE_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "$1\n"' >> temp-proxy.txt
           #curl -sSL ${CUSTOM_PROXY} | grep -Ev ":@cn" | perl -ne '/^(domain):([^:]+)(\n$|:@.+)/ && print "$2\n"' >> temp-proxy.txt
-          cp ./main/geolocation-!cn temp-proxy.txt
+          cp ./geolocation-!cn temp-proxy.txt
 
       - name: Get and add reject domains into temp-reject.txt file
         run: |
@@ -102,7 +96,7 @@ jobs:
         run: |
           curl -sSL ${CUSTOM_DIRECT} | perl -ne '/^((full|regexp|keyword):[^:]+)(\n$|:@.+)/ && print "$1\n"' | sort --ignore-case -u > direct-reserve.txt
           #curl -sSL ${CUSTOM_PROXY} | grep -Ev ":@cn" | perl -ne '/^((full|regexp|keyword):[^:]+)(\n$|:@.+)/ && print "$1\n"' | sort --ignore-case -u > proxy-reserve.txt
-          #grep -Ev ":@cn" './main/geolocation-!cn' | perl -ne '/^((full|regexp|keyword):[^:]+)(\n$|:@.+)/ && print "$1\n"' | sort --ignore-case -u > proxy-reserve.txt
+          #grep -Ev ":@cn" './geolocation-!cn' | perl -ne '/^((full|regexp|keyword):[^:]+)(\n$|:@.+)/ && print "$1\n"' | sort --ignore-case -u > proxy-reserve.txt
 
       - name: Add proxy, direct and reject domains from "hidden" branch to appropriate temp files
         run: |
