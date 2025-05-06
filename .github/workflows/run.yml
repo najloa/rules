@@ -3,9 +3,10 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - hidden
+      - main
     paths:
-      - "**"
+      - "**/run.yml"
+      - "**/geolocation-!cn"
   schedule:
     - cron: "0 22 * * *"
 jobs:
