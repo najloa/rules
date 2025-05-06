@@ -1,6 +1,7 @@
 name: Build V2Ray rules dat files
 on:
   workflow_dispatch:
+  push: # 监听所有分支的推送事件
   schedule:
     - cron: "0 22 * * *"
 jobs:
