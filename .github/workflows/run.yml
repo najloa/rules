@@ -3,7 +3,9 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - '**'
+      - hidden
+    paths:
+      - "**"
   schedule:
     - cron: "0 22 * * *"
 jobs:
