@@ -1,3 +1,4 @@
+linux2.do
 linux.do
 nodeseek.com
 whoer.net
