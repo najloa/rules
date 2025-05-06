@@ -1,17 +1,14 @@
-name: v2fly/domain-list-community
+name: 代理域名列表
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 21 * * *'  # 每天执行，可修改
-
+    - cron: '0 21 * * *'  # 每天执行
   push:
     branches:
       - main
-    paths-ignore:
-      - "**/README.md"
-      - "**/geolocation-!cn"
-      - "**/run.yml"
+    paths:
+      - "**/data.yml"
 jobs:
   merge-and-push:
     runs-on: ubuntu-latest
@@ -92,7 +89,7 @@ jobs:
             }
           ' "$OUTPUT_RAW" | sort -u > publish/geolocation-\!cn
 
-      - name: Commit and push geolocation-\!cn
+      - name: Commit and push geolocation-!cn
         run: |
           cp publish/geolocation-\!cn .
 
