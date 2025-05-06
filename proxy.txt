@@ -1,3 +1,4 @@
+code.jquery.com
 gravatar.com
 novaxns.one
 linux.do
