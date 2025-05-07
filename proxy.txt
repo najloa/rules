@@ -1,4 +1,5 @@
 code.jquery.com
+simptown.su
 gravatar.com
 novaxns.one
 linux.do
