@@ -1,4 +1,5 @@
 code.jquery.com
+hostloc.com
 newsweek.com
 ow.ly
 simptown.su
