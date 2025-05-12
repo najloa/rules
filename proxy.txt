@@ -1,5 +1,6 @@
-ow.ly
 code.jquery.com
+newsweek.com
+ow.ly
 simptown.su
 gravatar.com
 novaxns.one
