@@ -1,6 +1,6 @@
-name: Manual Upload to geoip
+#name: Manual Upload to geoip
 
-on:
+#on:
   workflow_dispatch:
     inputs:
       tag:
