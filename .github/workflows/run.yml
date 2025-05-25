@@ -600,7 +600,6 @@ jobs:
           : > ./community/data/geekpark
           : > ./community/data/geetest
           : > ./community/data/gemfury
-          : > ./community/data/geolocation-!cn
           : > ./community/data/geolocation-cn
           : > ./community/data/gettyimages
           : > ./community/data/gfycat
