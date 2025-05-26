@@ -181,6 +181,7 @@ jobs:
           : > ./community/data/win-spy
           : > ./community/data/win-update
           : > ./community/data/win-extra
+          : > ./community/data/gfw
           : > ./community/data/0x0
           : > ./community/data/1.py
           : > ./community/data/115
