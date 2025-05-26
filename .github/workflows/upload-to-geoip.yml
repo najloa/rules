@@ -1,13 +1,13 @@
 #name: Manual Upload to geoip
 
 #on:
-  workflow_dispatch:
-    inputs:
-      tag:
-        description: "Tag name of the release to sync"
-        required: true
+  #workflow_dispatch:
+    #inputs:
+      #tag:
+        #description: "Tag name of the release to sync"
+        #required: true
 
-jobs:
+#jobs:
   upload:
     runs-on: ubuntu-latest
 
