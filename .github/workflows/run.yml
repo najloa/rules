@@ -183,6 +183,7 @@ jobs:
           : > ./community/data/win-extra
           : > ./community/data/category-porn
           : > ./community/data/gfw
+          : > ./community/data/apple-cn
           : > ./community/data/0x0
           : > ./community/data/1.py
           : > ./community/data/115
@@ -1079,7 +1080,6 @@ jobs:
           : > ./community/data/startpage
           : > ./community/data/starworld
           : > ./community/data/staticfile
-          : > ./community/data/steam
           : > ./community/data/steamunlocked
           : > ./community/data/steemit
           : > ./community/data/sto-express
