@@ -284,7 +284,6 @@ jobs:
           : > ./community/data/aws-cn
           : > ./community/data/azure
           : > ./community/data/b3log
-          : > ./community/data/bahamut
           : > ./community/data/baidu
           : > ./community/data/baidu-ads
           : > ./community/data/baijiayun
