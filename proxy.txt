@@ -236,6 +236,7 @@ saint2.cr
 saint2.su
 greasyfork.org
 igram.world
+fastdl.app
 nate.com
 note.com
 handjob-hd.net
