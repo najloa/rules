@@ -185,7 +185,7 @@ jobs:
           cp ./speedup ./community/data/speedup
           cp ./twitchcdn ./community/data/twitchcdn
           rm -rf ./community/data/china-list
-          #rm -rf ./community/data/greatfire
+          rm -rf ./community/data/greatfire
           #rm -rf ./community/data/win-spy
           #rm -rf ./community/data/win-update
           #rm -rf ./community/data/win-extra
