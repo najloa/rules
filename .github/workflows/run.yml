@@ -174,11 +174,14 @@ jobs:
 
       - name: Build geosite.dat file
         run: |
-          ls
-          find . -type d -name "*custom*"
-          find . -type d -name "*community*"
+          echo "0000000000000000000"
+          ls ./custom
+          echo "1111111111111111111"
+          ls ./community
+          echo "2222222222222222222"
           cp ./speedup ./community/data/speedup
           cp ./twitchcdn ./community/data/twitchcdn
+          find . -type f -name "main.go"
           : > ./community/data/china-list
           : > ./community/data/greatfire
           : > ./community/data/win-spy
@@ -186,6 +189,7 @@ jobs:
           : > ./community/data/win-extra
           : > ./community/data/category-porn
           : > ./community/data/gfw
+          echo "3333333333333333333"
           cd custom || exit 1
           ls
           go run ./ --datapath=../community/data
@@ -195,11 +199,9 @@ jobs:
           install -Dp ./geoip.dat ./publish/geoip.dat
           install -Dp ./geoip.dat.sha256sum ./publish/geoip.dat.sha256sum
           install -Dp ./custom/publish/geosite.dat ./publish/geosite.dat
-          install -p {proxy,direct,reject}-tld-list.txt ./publish/
-          install -p {proxy,direct,reject}-list.txt ./publish/
-          install -p {china-list,apple-cn,google-cn,gfw,greatfire,win-spy,win-update,win-extra}.txt ./publish/
+          install -p {proxy,direct}-list.txt ./publish/
           cd ./publish || exit 1
-          zip rules.zip {proxy,direct,reject}-list.txt geoip.dat geosite.dat
+          zip rules.zip {proxy,direct}-list.txt geoip.dat geosite.dat
           sha256sum geosite.dat > geosite.dat.sha256sum
           sha256sum rules.zip > rules.zip.sha256sum
 
