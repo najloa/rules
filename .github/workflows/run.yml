@@ -385,7 +385,7 @@ jobs:
           rm -rf ./community/data/category-ads
           rm -rf ./community/data/category-ads-all
           rm -rf ./community/data/category-ads-ir
-          rm -rf ./community/data/category-ai-chat-!cn
+          #rm -rf ./community/data/category-ai-chat-!cn
           rm -rf ./community/data/category-ai-cn
           rm -rf ./community/data/category-android-app-download
           rm -rf ./community/data/category-anticensorship
@@ -395,7 +395,7 @@ jobs:
           rm -rf ./community/data/category-bank-mm
           rm -rf ./community/data/category-blog-cn
           rm -rf ./community/data/category-bourse-ir
-          rm -rf ./community/data/category-browser-!cn
+          #rm -rf ./community/data/category-browser-!cn
           rm -rf ./community/data/category-cas
           rm -rf ./community/data/category-collaborate-cn
           rm -rf ./community/data/category-communication
@@ -421,7 +421,7 @@ jobs:
           rm -rf ./community/data/category-game-accelerator-cn
           rm -rf ./community/data/category-game-platforms-download
           rm -rf ./community/data/category-games
-          rm -rf ./community/data/category-games-!cn
+          #rm -rf ./community/data/category-games-!cn
           rm -rf ./community/data/category-games-cn
           rm -rf ./community/data/category-gov-ir
           rm -rf ./community/data/category-gov-ru
@@ -455,13 +455,13 @@ jobs:
           rm -rf ./community/data/category-public-tracker
           rm -rf ./community/data/category-remote-control
           rm -rf ./community/data/category-ru
-          rm -rf ./community/data/category-scholar-!cn
+          #rm -rf ./community/data/category-scholar-!cn
           rm -rf ./community/data/category-scholar-cn
           rm -rf ./community/data/category-scholar-ir
           rm -rf ./community/data/category-scholar-uk
           rm -rf ./community/data/category-securities-cn
           rm -rf ./community/data/category-shopping-ir
-          rm -rf ./community/data/category-social-media-!cn
+          #rm -rf ./community/data/category-social-media-!cn
           rm -rf ./community/data/category-social-media-cn
           rm -rf ./community/data/category-social-media-ir
           rm -rf ./community/data/category-speedtest
@@ -511,7 +511,7 @@ jobs:
           rm -rf ./community/data/cloudinary
           rm -rf ./community/data/clubhouse
           rm -rf ./community/data/cmb
-          rm -rf ./community/data/cn
+          #rm -rf ./community/data/cn
           rm -rf ./community/data/cnbc
           rm -rf ./community/data/cnbeta
           rm -rf ./community/data/cnblogs
@@ -1389,7 +1389,7 @@ jobs:
           rm -rf ./community/data/tiktok
           rm -rf ./community/data/tinyurl
           rm -rf ./community/data/tipdm
-          rm -rf ./community/data/tld-!cn
+          #rm -rf ./community/data/tld-!cn
           rm -rf ./community/data/tld-cn
           rm -rf ./community/data/tld-opennic
           rm -rf ./community/data/tmdb
