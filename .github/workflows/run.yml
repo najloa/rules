@@ -1553,6 +1553,8 @@ jobs:
           rm -rf ./community/data/zynga-ads
           echo "-----------------------------"
           ls ./community/data
+          echo "-----------------------------"
+          cat './community/data/geolocation-!cn'
           cd custom || exit 1
           go run ./ --datapath=../community/data
 
