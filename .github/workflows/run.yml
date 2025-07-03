@@ -185,12 +185,12 @@ jobs:
           cp ./speedup ./community/data/speedup
           cp ./twitchcdn ./community/data/twitchcdn
           rm -rf ./community/data/china-list
-          rm -rf ./community/data/greatfire
-          rm -rf ./community/data/win-spy
-          rm -rf ./community/data/win-update
-          rm -rf ./community/data/win-extra
-          rm -rf ./community/data/category-porn
-          rm -rf ./community/data/gfw
+          #rm -rf ./community/data/greatfire
+          #rm -rf ./community/data/win-spy
+          #rm -rf ./community/data/win-update
+          #rm -rf ./community/data/win-extra
+          #rm -rf ./community/data/category-porn
+          #rm -rf ./community/data/gfw
           cd custom || exit 1
           go run ./ --datapath=../community/data
 
