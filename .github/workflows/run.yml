@@ -160,12 +160,10 @@ jobs:
           echo "-----------------------------"
           cp ./speedup ./community/data/speedup
           cp ./twitchcdn ./community/data/twitchcdn
-          find . -type f -name "greatfire"
-          find . -type f -name "win-spy"
-          #rm -rf ./community/data/win-update"
-          #rm -rf ./community/data/win-extra"
+          rm -rf ./community/data/category-porn
           find . -type f -name "category-porn"
-          find . -type f -name "gfw"
+          echo "-----------------------------"
+          ls ./community/data
           cd custom || exit 1
           go run ./ --datapath=../community/data
 
