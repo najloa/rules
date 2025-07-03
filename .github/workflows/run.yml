@@ -104,89 +104,63 @@ jobs:
         run: |
           cat proxy.txt >> temp-proxy.txt
           cat direct.txt >> temp-direct.txt
-          cat reject.txt >> temp-reject.txt
 
       - name: Sort and generate redundant lists
         run: |
           cat temp-proxy.txt | sort --ignore-case -u > proxy-list-with-redundant
           cat temp-direct.txt | sort --ignore-case -u > direct-list-with-redundant
-          cat temp-reject.txt | sort --ignore-case -u > reject-list-with-redundant
 
       - name: Remove redundant domains
         run: |
           chmod +x findRedundantDomain.py
           ./findRedundantDomain.py ./direct-list-with-redundant ./direct-list-deleted-unsort
           ./findRedundantDomain.py ./proxy-list-with-redundant ./proxy-list-deleted-unsort
-          ./findRedundantDomain.py ./reject-list-with-redundant ./reject-list-deleted-unsort
           [ ! -f "direct-list-deleted-unsort" ] && touch direct-list-deleted-unsort
           [ ! -f "proxy-list-deleted-unsort" ] && touch proxy-list-deleted-unsort
-          [ ! -f "reject-list-deleted-unsort" ] && touch reject-list-deleted-unsort
           sort ./direct-list-deleted-unsort > ./direct-list-deleted-sort
           sort ./proxy-list-deleted-unsort > ./proxy-list-deleted-sort
-          sort ./reject-list-deleted-unsort > ./reject-list-deleted-sort
           diff ./direct-list-deleted-sort ./direct-list-with-redundant | awk '/^>/{print $2}' > ./direct-list-without-redundant
           diff ./proxy-list-deleted-sort ./proxy-list-with-redundant | awk '/^>/{print $2}' > ./proxy-list-without-redundant
-          diff ./reject-list-deleted-sort ./reject-list-with-redundant | awk '/^>/{print $2}' > ./reject-list-without-redundant
 
       - name: Remove domains from "need-to-remove" lists in "hidden" branch
         run: |
           diff ./direct-need-to-remove.txt ./direct-list-without-redundant | awk '/^>/{print $2}' > temp-cn.txt
           diff ./proxy-need-to-remove.txt ./proxy-list-without-redundant | awk '/^>/{print $2}' > temp-geolocation-\!cn.txt
-          diff ./reject-need-to-remove.txt ./reject-list-without-redundant | awk '/^>/{print $2}' > temp-category-ads-all.txt
 
       - name: Write lists to data directory
         run: |
           cat temp-cn.txt | sort --ignore-case -u | perl -ne '/^((?=^.{1,255})[a-zA-Z0-9][-_a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-_a-zA-Z0-9]{0,62})*)/ && print "$1\n"' > ./community/data/cn
-          cat temp-cn.txt | sort --ignore-case -u | perl -ne 'print if not /^((?=^.{3,255})[a-zA-Z0-9][-_a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-_a-zA-Z0-9]{0,62})+)/' > direct-tld-list.txt
-          #cat temp-geolocation-\!cn.txt | sort --ignore-case -u | perl -ne '/^((?=^.{1,255})[a-zA-Z0-9][-_a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-_a-zA-Z0-9]{0,62})*)/ && print "$1\n"' > ./community/data/geolocation-\!cn
           cat temp-geolocation-\!cn.txt > ./community/data/geolocation-\!cn
-          cat temp-geolocation-\!cn.txt | sort --ignore-case -u | perl -ne 'print if not /^((?=^.{3,255})[a-zA-Z0-9][-_a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-_a-zA-Z0-9]{0,62})+)/' > proxy-tld-list.txt
-          cat temp-category-ads-all.txt | sort --ignore-case -u | perl -ne '/^((?=^.{1,255})[a-zA-Z0-9][-_a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-_a-zA-Z0-9]{0,62})*)/ && print "$1\n"' > ./community/data/category-ads-all
-          cat temp-category-ads-all.txt | sort --ignore-case -u | perl -ne 'print if not /^((?=^.{3,255})[a-zA-Z0-9][-_a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-_a-zA-Z0-9]{0,62})+)/' > reject-tld-list.txt
 
       - name: Add `full`, `regexp` and `keyword` type of rules back into "cn", "geolocation-!cn" and "category-ads-all" list
         run: |
           [ -f "direct-reserve.txt" ] && cat direct-reserve.txt >> ./community/data/cn
           #[ -f "proxy-reserve.txt" ] && cat proxy-reserve.txt >> ./community/data/geolocation-\!cn
-          cp ./community/data/geolocation-\!cn proxy2-list.txt
-          [ -f "reject-reserve.txt" ] && cat reject-reserve.txt >> ./community/data/category-ads-all
           cp ./community/data/cn direct-list.txt
           cp ./community/data/geolocation-\!cn proxy-list.txt
-          cp ./community/data/category-ads-all reject-list.txt
 
       - name: Create `china-list`、`google-cn`、`apple-cn`、`gfw`、`greatfire` lists
         run: |
-          curl -sSL $CHINA_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "$1\n"' > ./community/data/china-list
-          curl -sSL $CHINA_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "$1\n"' > china-list.txt
           curl -sSL $GOOGLE_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "full:$1\n"' > ./community/data/google-cn
-          curl -sSL $GOOGLE_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "full:$1\n"' > google-cn.txt
           curl -sSL $APPLE_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "full:$1\n"' > ./community/data/apple-cn
-          curl -sSL $APPLE_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "full:$1\n"' > apple-cn.txt
-          cat ./gfwlist2dnsmasq/temp-gfwlist.txt | perl -ne '/^((?=^.{3,255})[a-zA-Z0-9][-_a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-_a-zA-Z0-9]{0,62})+)/ && print "$1\n"' >> ./community/data/gfw
-          cat ./community/data/gfw | sort --ignore-case -u > gfw.txt
-          cat ./community/data/greatfire | sort --ignore-case -u > greatfire.txt
-          curl -sSL $WIN_SPY | grep "0.0.0.0" | awk '{print $2}' > ./community/data/win-spy
-          curl -sSL $WIN_SPY | grep "0.0.0.0" | awk '{print $2}' > win-spy.txt
-          curl -sSL $WIN_UPDATE | grep "0.0.0.0" | awk '{print $2}' > ./community/data/win-update
-          curl -sSL $WIN_UPDATE | grep "0.0.0.0" | awk '{print $2}' > win-update.txt
-          curl -sSL $WIN_EXTRA | grep "0.0.0.0" | awk '{print $2}' > ./community/data/win-extra
-          curl -sSL $WIN_EXTRA | grep "0.0.0.0" | awk '{print $2}' > win-extra.txt
 
       - name: Build geosite.dat file
         run: |
           find . -type f -name "main.go"
           echo "-----------------------------"
           ls ./custom
+          echo "-----------------------------"
           ls ./community
-          grep exportLists ./custom/main.go
+          echo "-----------------------------"
           sed -E -i 's/(flag\.String\("exportlists", ")[^"]*/\1geolocation-!cn/' ./custom/main.go
-          grep exportLists ./custom/main.go
+          echo "-----------------------------"
           find . -type f -name "greatfire"
+          echo "-----------------------------"
+          grep exportLists ./custom/main.go
           echo "-----------------------------"
           cp ./speedup ./community/data/speedup
           cp ./twitchcdn ./community/data/twitchcdn
-          rm -rf ./community/data/china-list
-          rm -rf ./community/data/greatfire
+          #rm -rf ./community/data/greatfire
           #rm -rf ./community/data/win-spy
           #rm -rf ./community/data/win-update
           #rm -rf ./community/data/win-extra
