@@ -28,7 +28,7 @@ jobs:
           echo "ADGUARD_DNS_REJECT_URL=https://adguardteam.github.io/AdGuardSDNSFilter/Filters/filter.txt" >> $GITHUB_ENV
           echo "DANPOLLOCK_REJECT_URL=https://someonewhocares.org/hosts/hosts" >> $GITHUB_ENV
           echo "CUSTOM_DIRECT=https://raw.githubusercontent.com/Loyalsoldier/domain-list-custom/release/cn.txt" >> $GITHUB_ENV
-          echo "CUSTOM_PROXY=https://raw.githubusercontent.com/Loyalsoldier/domain-list-custom/release/geolocation-!cn.txt" >> $GITHUB_ENV
+          echo "CUSTOM_PROXY=https://github.com/najloa/v2ray-rules-dat/raw/refs/heads/main/geolocation-!cn" >> $GITHUB_ENV
           echo "WIN_SPY=https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt" >> $GITHUB_ENV
           echo "WIN_UPDATE=https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/update.txt" >> $GITHUB_ENV
           echo "WIN_EXTRA=https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/extra.txt" >> $GITHUB_ENV
@@ -174,6 +174,9 @@ jobs:
 
       - name: Build geosite.dat file
         run: |
+          ls
+          find . -type d -name "*custom*"
+          find . -type d -name "*community*"
           cp ./speedup ./community/data/speedup
           cp ./twitchcdn ./community/data/twitchcdn
           : > ./community/data/china-list
@@ -183,205 +186,8 @@ jobs:
           : > ./community/data/win-extra
           : > ./community/data/category-porn
           : > ./community/data/gfw
-
-          rm -rf ./community/data/0x0
-          rm -rf ./community/data/115
-          rm -rf ./community/data/1337x
-          rm -rf ./community/data/17zuoye
-          rm -rf ./community/data/18comic
-          rm -rf ./community/data/2ch
-          rm -rf ./community/data/2kgames
-          rm -rf ./community/data/36kr
-          rm -rf ./community/data/3dm
-          rm -rf ./community/data/3type
-          rm -rf ./community/data/4399
-          rm -rf ./community/data/4chan
-          rm -rf ./community/data/4paradigm
-          rm -rf ./community/data/4plebs
-          rm -rf ./community/data/51job
-          rm -rf ./community/data/54647
-          rm -rf ./community/data/58tongcheng
-          rm -rf ./community/data/5ch
-          rm -rf ./community/data/6park
-          rm -rf ./community/data/75team
-          rm -rf ./community/data/800best
-          rm -rf ./community/data/8btc
-          rm -rf ./community/data/928plus
-          rm -rf ./community/data/9news
-          rm -rf ./community/data/9to5
-          rm -rf ./community/data/aamgame
-          rm -rf ./community/data/abc
-          rm -rf ./community/data/abema
-          rm -rf ./community/data/accuweather
-          rm -rf ./community/data/acer
-          rm -rf ./community/data/acfun
-          rm -rf ./community/data/acfun-ads
-          rm -rf ./community/data/acplay
-          rm -rf ./community/data/actalis
-          rm -rf ./community/data/adblock
-          rm -rf ./community/data/adblockplus
-          rm -rf ./community/data/adcolony-ads
-          rm -rf ./community/data/addthis
-          rm -rf ./community/data/addtoany
-          rm -rf ./community/data/adguard
-          rm -rf ./community/data/adidas
-          rm -rf ./community/data/adjust-ads
-          rm -rf ./community/data/adobe
-          rm -rf ./community/data/adobe-activation
-          rm -rf ./community/data/adobe-ads
-          rm -rf ./community/data/aerogard
-          rm -rf ./community/data/afdian
-          rm -rf ./community/data/afp
-          rm -rf ./community/data/agilebits
-          rm -rf ./community/data/agora
-          rm -rf ./community/data/aiqicha
-          rm -rf ./community/data/airchina
-          rm -rf ./community/data/airwick
-          rm -rf ./community/data/aisiku
-          rm -rf ./community/data/aixcoder
-          rm -rf ./community/data/akamai
-          rm -rf ./community/data/akiko
-          rm -rf ./community/data/ali213
-          rm -rf ./community/data/alibaba
-          rm -rf ./community/data/alibaba-ads
-          rm -rf ./community/data/alibabacloud
-          rm -rf ./community/data/aliyun
-          rm -rf ./community/data/aljazeera
-          rm -rf ./community/data/amap
-          rm -rf ./community/data/amazon
-          rm -rf ./community/data/amazon-ads
-          rm -rf ./community/data/amazontrust
-          rm -rf ./community/data/amc
-          rm -rf ./community/data/amd
-          rm -rf ./community/data/amp
-          rm -rf ./community/data/anaconda
-          rm -rf ./community/data/anandtech
-          rm -rf ./community/data/android
-          rm -rf ./community/data/anime
-          rm -rf ./community/data/annas-archive
-          rm -rf ./community/data/anon-v
-          rm -rf ./community/data/antutu
-          rm -rf ./community/data/ap
-          rm -rf ./community/data/apa
-          rm -rf ./community/data/aparat
-          rm -rf ./community/data/apifox
-          rm -rf ./community/data/apipost
-          rm -rf ./community/data/apkcombo
-          rm -rf ./community/data/apkmirror
-          rm -rf ./community/data/apkpure
-          rm -rf ./community/data/apple
-          rm -rf ./community/data/apple-ads
-          rm -rf ./community/data/apple-dev
-          rm -rf ./community/data/apple-intelligence
-          rm -rf ./community/data/apple-pki
-          rm -rf ./community/data/apple-tvplus
-          rm -rf ./community/data/apple-update
-          rm -rf ./community/data/appledaily
-          rm -rf ./community/data/applovin-ads
-          rm -rf ./community/data/applysquare
-          rm -rf ./community/data/aptoide
-          rm -rf ./community/data/archive
-          rm -rf ./community/data/archiveofourown
-          rm -rf ./community/data/archlinux
-          rm -rf ./community/data/arphic
-          rm -rf ./community/data/artstation
-          rm -rf ./community/data/asahi
-          rm -rf ./community/data/asobo
-          rm -rf ./community/data/asproex
-          rm -rf ./community/data/asus
-          rm -rf ./community/data/atlassian
-          rm -rf ./community/data/atom-data-ads
-          rm -rf ./community/data/att
-          rm -rf ./community/data/attwatchtv
-          rm -rf ./community/data/authy
-          rm -rf ./community/data/autodesk
-          rm -rf ./community/data/avaxhome
-          rm -rf ./community/data/avmoo
-          rm -rf ./community/data/awempire
-          rm -rf ./community/data/aws
-          rm -rf ./community/data/aws-cn
-          rm -rf ./community/data/azure
-          rm -rf ./community/data/b3log
-          rm -rf ./community/data/bahamut
-          rm -rf ./community/data/baidu
-          rm -rf ./community/data/baidu-ads
-          rm -rf ./community/data/baijiayun
-          rm -rf ./community/data/baltamatica
-          rm -rf ./community/data/bamtech
-          rm -rf ./community/data/bandcamp
-          rm -rf ./community/data/bandwagonhost
-          rm -rf ./community/data/bangumi
-          rm -rf ./community/data/barrons
-          rm -rf ./community/data/bbc
-          rm -rf ./community/data/bcy
-          rm -rf ./community/data/bdsmhub
-          rm -rf ./community/data/beats
-          rm -rf ./community/data/beisen
-          rm -rf ./community/data/bestbuy
-          rm -rf ./community/data/bestore
-          rm -rf ./community/data/bestv
-          rm -rf ./community/data/bethesda
-          rm -rf ./community/data/betterexplained
-          rm -rf ./community/data/bilibili
-          rm -rf ./community/data/bilibili-game
-          rm -rf ./community/data/bilibili2
-          rm -rf ./community/data/binance
-          rm -rf ./community/data/bing
-          rm -rf ./community/data/bitauto
-          rm -rf ./community/data/bitflyer
-          rm -rf ./community/data/bitly
-          rm -rf ./community/data/bitsquare
-          rm -rf ./community/data/bitwarden
-          rm -rf ./community/data/bjyouth
-          rm -rf ./community/data/blender
-          rm -rf ./community/data/blizzard
-          rm -rf ./community/data/blogspot
-          rm -rf ./community/data/bloomberg
-          rm -rf ./community/data/bluearchive
-          rm -rf ./community/data/bluepoch
-          rm -rf ./community/data/bluepoch-games
-          rm -rf ./community/data/bluesky
-          rm -rf ./community/data/blurams
-          rm -rf ./community/data/bmw
-          rm -rf ./community/data/boboporn
-          rm -rf ./community/data/boc
-          rm -rf ./community/data/bongacams
-          rm -rf ./community/data/booking
-          rm -rf ./community/data/books
-          rm -rf ./community/data/boomerang
-          rm -rf ./community/data/bootcdn
-          rm -rf ./community/data/bootcss
-          rm -rf ./community/data/bootstrap
-          rm -rf ./community/data/borneoschematics
-          rm -rf ./community/data/boslife
-          rm -rf ./community/data/boxun
-          rm -rf ./community/data/boylove
-          rm -rf ./community/data/braveux
-          rm -rf ./community/data/brazzers
-          rm -rf ./community/data/bridgestone
-          rm -rf ./community/data/brightcove
-          rm -rf ./community/data/brilliant
-          rm -rf ./community/data/broadcom
-          rm -rf ./community/data/btdig
-          rm -rf ./community/data/bttzyw
-          rm -rf ./community/data/buymeacoffee
-          rm -rf ./community/data/buypass
-          rm -rf ./community/data/bybit
-          rm -rf ./community/data/bytedance
-          rm -rf ./community/data/bytedance-ads
-          rm -rf ./community/data/c-span
-          rm -rf ./community/data/cabletv
-          rm -rf ./community/data/cainiao
-          rm -rf ./community/data/calgoncarbon
-          rm -rf ./community/data/cambridge
-          rm -rf ./community/data/camwhores
-          rm -rf ./community/data/canon
-          rm -rf ./community/data/canonical
-          rm -rf ./community/data/capitalonline
-          rm -rf ./community/data/cas
-
-          
           cd custom || exit 1
+          ls
           go run ./ --datapath=../community/data
 
       - name: Move and zip files and generate sha256 hash
