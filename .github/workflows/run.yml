@@ -201,7 +201,6 @@ jobs:
           install -Dp ./custom/publish/geosite.dat ./publish/geosite.dat
           install -p {proxy,direct}-list.txt ./publish/
           cd ./publish || exit 1
-          {proxy,direct}-list.txt geoip.dat geosite.dat
           sha256sum geosite.dat > geosite.dat.sha256sum
 
       - name: Release and upload assets
