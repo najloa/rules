@@ -160,8 +160,7 @@ jobs:
           echo "-----------------------------"
           cp ./speedup ./community/data/speedup
           cp ./twitchcdn ./community/data/twitchcdn
-          rm -rf ./community/data/category-porn
-          find . -type f -name "category-porn"
+          rm -rf ./community/data/category-porn ./community/data/category-bank-cn
           echo "-----------------------------"
           ls ./community/data
           cd custom || exit 1
