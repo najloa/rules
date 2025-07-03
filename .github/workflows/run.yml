@@ -174,14 +174,16 @@ jobs:
 
       - name: Build geosite.dat file
         run: |
-          echo "0000000000000000000"
+          find . -type f -name "main.go"
+          echo "-----------------------------"
           ls ./custom
-          echo "1111111111111111111"
           ls ./community
-          echo "2222222222222222222"
+          grep exportLists ./custom/main.go
+          sed -E -i 's/(flag\.String\("exportlists", ")[^"]*/\1geolocation-!cn/' ./custom/main.go
+          grep exportLists ./custom/main.go
+          echo "-----------------------------"
           cp ./speedup ./community/data/speedup
           cp ./twitchcdn ./community/data/twitchcdn
-          find . -type f -name "main.go"
           : > ./community/data/china-list
           : > ./community/data/greatfire
           : > ./community/data/win-spy
@@ -189,9 +191,7 @@ jobs:
           : > ./community/data/win-extra
           : > ./community/data/category-porn
           : > ./community/data/gfw
-          echo "3333333333333333333"
           cd custom || exit 1
-          ls
           go run ./ --datapath=../community/data
 
       - name: Move and zip files and generate sha256 hash
@@ -201,9 +201,8 @@ jobs:
           install -Dp ./custom/publish/geosite.dat ./publish/geosite.dat
           install -p {proxy,direct}-list.txt ./publish/
           cd ./publish || exit 1
-          zip rules.zip {proxy,direct}-list.txt geoip.dat geosite.dat
+          {proxy,direct}-list.txt geoip.dat geosite.dat
           sha256sum geosite.dat > geosite.dat.sha256sum
-          sha256sum rules.zip > rules.zip.sha256sum
 
       - name: Release and upload assets
         uses: svenstaro/upload-release-action@v2
