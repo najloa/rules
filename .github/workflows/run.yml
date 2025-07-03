@@ -184,13 +184,13 @@ jobs:
           echo "-----------------------------"
           cp ./speedup ./community/data/speedup
           cp ./twitchcdn ./community/data/twitchcdn
-          : > ./community/data/china-list
-          : > ./community/data/greatfire
-          : > ./community/data/win-spy
-          : > ./community/data/win-update
-          : > ./community/data/win-extra
-          : > ./community/data/category-porn
-          : > ./community/data/gfw
+          rm -rf ./community/data/china-list
+          rm -rf ./community/data/greatfire
+          rm -rf ./community/data/win-spy
+          rm -rf ./community/data/win-update
+          rm -rf ./community/data/win-extra
+          rm -rf ./community/data/category-porn
+          rm -rf ./community/data/gfw
           cd custom || exit 1
           go run ./ --datapath=../community/data
 
