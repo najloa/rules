@@ -309,11 +309,13 @@ jobs:
           echo "-----------------------------"
           ls ./community
           echo "-----------------------------"
-          sed -i 's/"category-ads-all,tld-cn,cn,geolocation-cn,tld-!cn,geolocation-!cn,private,apple,icloud,google,steam",//g' ./custom/main.go
-          sed -i 's/"cn@!cn@ads,geolocation-cn@!cn@ads,geolocation-!cn@cn@ads",//g' ./custom/main.go
-          echo "-----------------------------"
+          sed -i 's/category-ads-all,tld-cn,cn,geolocation-cn,tld-!cn,geolocation-!cn,//g' ./custom/main.go
+          sed -i 's/,apple,icloud,google,steam//g' ./custom/main.go
           grep exportLists ./custom/main.go
           echo "-----------------------------"
+          echo "-----------------------------"
+          sed -i 's/cn@!cn@ads,geolocation-cn@!cn@ads,//g' ./custom/main.go
+          sed -i 's/@cn//g' ./custom/main.go
           grep excludeAttrs ./custom/main.go
           echo "-----------------------------"
           cp ./speedup ./community/data/speedup
