@@ -72,8 +72,8 @@ jobs:
               line="${line//[[:space:]]/}"
               [[ -z "$line" ]] && continue
 
-              if [[ "$line" =~ ^include:([a-zA-Z0-9._-]+)$ ]]; then
-                child="${BASH_REMATCH[1]}"
+              if [[ "$line" == include:* ]]; then
+                child="${line#include:}"
                 process_file "$child" "$delete_cn_flag"
               elif [[ "$delete_cn_flag" -eq 1 && "$line" == *@cn* ]]; then
                 continue
@@ -93,21 +93,20 @@ jobs:
             sed -E '/^\s*$/d; s/@.*//; s/\s+//g' |
             grep -v '^#' |
             sort -u > "$OUTPUT_FINAL"
-#' "$OUTPUT_RAW" | sort -u > publish/geolocation-\!cn
 
       - name: Commit and push geolocation-!cn
         run: |
-          cp publish/geolocation-\!cn .
+          cp publish/geolocation-!cn .
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add geolocation-\!cn
+          git add geolocation-!cn
 
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "Auto update geolocation-\!cn"
+            git commit -m "Auto update geolocation-!cn"
             git push -u origin main
           fi
 
