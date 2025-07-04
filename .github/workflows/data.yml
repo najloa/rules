@@ -85,6 +85,7 @@ jobs:
               fi
             done < "$path"
           
+            echo ">>> finished processing $name"
             # 合并当前文件内容到输出原始文件
             cat "$temp_clean" >> "$OUTPUT_RAW"
             rm -f "$temp_clean"
