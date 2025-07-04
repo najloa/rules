@@ -122,8 +122,8 @@ jobs:
           echo "-----------------------------"
           cp ./speedup ./community/data/speedup
           cp ./twitchcdn ./community/data/twitchcdn
-          rm -rf ./community/data/cnn
-          echo "-----------------------------"
+          rm -rf ./community/data/category-media
+          echo "bunengyoufuwenjian"
           #ls ./community/data
           echo "-----------------------------"
           cd custom || exit 1
