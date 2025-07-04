@@ -1515,8 +1515,12 @@ jobs:
           rm -f ./community/data/zto-express
           rm -f ./community/data/zuoyebang
           rm -f ./community/data/zynga-ads
-
           echo "---------------/category-media--------------bunengyoufuwenjian"
+          echo "===== ./community/data/geolocation-!cn content ====="
+          cat ./community/data/geolocation-!cn || echo "File not found!"
+          echo "===== ./community/data/google-cn content ====="
+          cat ./community/data/google-cn || echo "File not found!"
+          echo "-----------------------------"
           ls ./community/data
           echo "-----------------------------"
           cd custom || exit 1
