@@ -309,10 +309,10 @@ jobs:
           echo "-----------------------------"
           ls ./community
           echo "-----------------------------"
-          sed -E -i 's/(flag\.String\("exportlists", ")[^"]*/\1geolocation-!cn/' ./custom/main.go
+          sed -i 's/"category-ads-all,tld-cn,cn,geolocation-cn,tld-!cn,geolocation-!cn,private,apple,icloud,google,steam",//g' ./custom/main.go
+          sed -i 's/"cn@!cn@ads,geolocation-cn@!cn@ads,geolocation-!cn@cn@ads",//g' ./custom/main.go
           echo "-----------------------------"
-
-          echo "-----------------------------"
+          cat ./custom/main.go
           cp ./speedup ./community/data/speedup
           cp ./twitchcdn ./community/data/twitchcdn
           echo "-----------------------------"
