@@ -75,6 +75,7 @@ jobs:
                 # 如果是 include:xxx，递归处理子文件，并传递当前的 delete_cn_flag
                 include_name="${BASH_REMATCH[1]}"
                 process_file "$include_name" "$delete_cn_flag"
+                continue
               else
                 # 如果 delete_cn_flag 开启，并且该行包含 @cn，则整行跳过
                 if [[ "$delete_cn_flag" == "1" && "$line" == *@cn* ]]; then
