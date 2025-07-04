@@ -311,17 +311,16 @@ jobs:
           echo "-----------------------------"
           sed -i 's/category-ads-all,tld-cn,cn,geolocation-cn,tld-!cn,geolocation-!cn,//g' ./custom/main.go
           sed -i 's/,apple,icloud,google,steam//g' ./custom/main.go
-          grep exportLists ./custom/main.go
-          echo "-----------------------------"
-          echo "-----------------------------"
           sed -i 's/cn@!cn@ads,geolocation-cn@!cn@ads,//g' ./custom/main.go
           sed -i 's/@cn//g' ./custom/main.go
+          echo "-----------------------------"
+          grep exportLists ./custom/main.go
           grep excludeAttrs ./custom/main.go
           echo "-----------------------------"
           cp ./speedup ./community/data/speedup
           cp ./twitchcdn ./community/data/twitchcdn
           echo "-----------------------------"
-          ls ./community/data
+          #ls ./community/data
           echo "-----------------------------"
           cd custom || exit 1
           go run ./ --datapath=../community/data
