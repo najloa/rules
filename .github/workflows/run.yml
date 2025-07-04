@@ -116,29 +116,29 @@ jobs:
           echo "-----------------------------"
           rm -f ./community/data/0x0
           rm -f ./community/data/115
-          : > ./community/data/1337x
-          : > ./community/data/17zuoye
-          : > ./community/data/18comic
-          : > ./community/data/2ch
-          : > ./community/data/2kgames
-          : > ./community/data/36kr
-          : > ./community/data/3dm
-          : > ./community/data/3type
-          : > ./community/data/4399
-          : > ./community/data/4chan
-          : > ./community/data/4paradigm
-          : > ./community/data/4plebs
-          : > ./community/data/51job
-          : > ./community/data/54647
-          : > ./community/data/58tongcheng
-          : > ./community/data/5ch
-          : > ./community/data/6park
-          : > ./community/data/75team
-          : > ./community/data/800best
-          : > ./community/data/8btc
-          : > ./community/data/928plus
-          : > ./community/data/9news
-          : > ./community/data/9to5
+          rm -f ./community/data/1337x
+          rm -f ./community/data/17zuoye
+          rm -f ./community/data/18comic
+          rm -f ./community/data/2ch
+          rm -f ./community/data/2kgames
+          rm -f ./community/data/36kr
+          rm -f ./community/data/3dm
+          rm -f ./community/data/3type
+          rm -f ./community/data/4399
+          rm -f ./community/data/4chan
+          rm -f ./community/data/4paradigm
+          rm -f ./community/data/4plebs
+          rm -f ./community/data/51job
+          rm -f ./community/data/54647
+          rm -f ./community/data/58tongcheng
+          rm -f ./community/data/5ch
+          rm -f ./community/data/6park
+          rm -f ./community/data/75team
+          rm -f ./community/data/800best
+          rm -f ./community/data/8btc
+          rm -f ./community/data/928plus
+          rm -f ./community/data/9news
+          rm -f ./community/data/9to5
           : > ./community/data/aamgame
           : > ./community/data/abc
           : > ./community/data/abema
