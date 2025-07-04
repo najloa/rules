@@ -106,23 +106,19 @@ jobs:
 
       - name: Build geosite.dat file
         run: |
-          find . -type f -name "main.go"
-          echo "-----------------------------"
-          ls ./custom
-          echo "-----------------------------"
-          ls ./community
-          echo "-----------------------------"
-          sed -i 's/category-ads-all,tld-cn,cn,geolocation-cn,tld-!cn,geolocation-!cn,//g' ./custom/main.go
-          sed -i 's/,apple,icloud,google,steam//g' ./custom/main.go
-          sed -i 's/cn@!cn@ads,geolocation-cn@!cn@ads,//g' ./custom/main.go
-          sed -i 's/@cn//g' ./custom/main.go
-          sed -i 's/,geolocation-cn@!cn//g' ./custom/main.go
-          echo "===== ./custom/main.go content ====="
-          cat ./custom/main.go || echo "File not found!"
+          #find . -type f -name "main.go"
+          #ls ./custom
+          #ls ./community
+          #sed -i 's/category-ads-all,tld-cn,cn,geolocation-cn,tld-!cn,geolocation-!cn,//g' ./custom/main.go
+          #sed -i 's/,apple,icloud,google,steam//g' ./custom/main.go
+          #sed -i 's/cn@!cn@ads,geolocation-cn@!cn@ads,//g' ./custom/main.go
+          #sed -i 's/@cn//g' ./custom/main.go
+          #sed -i 's/,geolocation-cn@!cn//g' ./custom/main.go
+          #echo "===== ./custom/main.go content ====="
+          #cat ./custom/main.go || echo "File not found!"
           echo "-----------------------------"
           cp ./speedup ./community/data/speedup
           cp ./twitchcdn ./community/data/twitchcdn
-          cp ./all ./community/data/all
           rm -f ./community/data/0x0
           rm -f ./community/data/115
           rm -f ./community/data/1337x
@@ -324,6 +320,7 @@ jobs:
           rm -f ./community/data/category-ads
           rm -f ./community/data/category-ads-all
           rm -f ./community/data/category-ads-ir
+          rm -f ./community/data/category-ai-chat-!cn
           rm -f ./community/data/category-ai-cn
           rm -f ./community/data/category-android-app-download
           rm -f ./community/data/category-anticensorship
@@ -639,7 +636,6 @@ jobs:
           rm -f ./community/data/geekpark
           rm -f ./community/data/geetest
           rm -f ./community/data/gemfury
-          #rm -f ./community/data/geolocation-!cn
           rm -f ./community/data/geolocation-cn
           rm -f ./community/data/gettyimages
           rm -f ./community/data/gfycat
@@ -1516,11 +1512,6 @@ jobs:
           rm -f ./community/data/zto-express
           rm -f ./community/data/zuoyebang
           rm -f ./community/data/zynga-ads
-          echo "---------------/category-media--------------bunengyoufuwenjian"
-          #echo "===== ./community/data/geolocation-!cn content ====="
-          #cat ./community/data/geolocation-!cn || echo "File not found!"
-          echo "===== ./community/data/google-cn content ====="
-          cat ./community/data/google-cn || echo "File not found!"
           echo "-----------------------------"
           ls ./community/data
           echo "-----------------------------"
