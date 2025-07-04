@@ -122,7 +122,7 @@ jobs:
           echo "-----------------------------"
           cp ./speedup ./community/data/speedup
           cp ./twitchcdn ./community/data/twitchcdn
-          rm -f ./community/data/yy
+          rm -f ./community/data/CATEGORY-COLLABORATE-CN
           echo "-----------------------------"
           #ls ./community/data
           echo "-----------------------------"
