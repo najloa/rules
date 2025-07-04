@@ -116,11 +116,13 @@ jobs:
           sed -i 's/,apple,icloud,google,steam//g' ./custom/main.go
           sed -i 's/cn@!cn@ads,geolocation-cn@!cn@ads,//g' ./custom/main.go
           sed -i 's/@cn//g' ./custom/main.go
+          sed -i 's/,geolocation-cn@!cn//g' ./custom/main.go
           echo "===== ./custom/main.go content ====="
           cat ./custom/main.go || echo "File not found!"
           echo "-----------------------------"
           cp ./speedup ./community/data/speedup
           cp ./twitchcdn ./community/data/twitchcdn
+          rm -f ./community/data/yy
           echo "-----------------------------"
           #ls ./community/data
           echo "-----------------------------"
