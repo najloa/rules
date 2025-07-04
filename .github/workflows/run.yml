@@ -1517,8 +1517,8 @@ jobs:
           rm -f ./community/data/zuoyebang
           rm -f ./community/data/zynga-ads
           echo "---------------/category-media--------------bunengyoufuwenjian"
-          echo "===== ./community/data/geolocation-!cn content ====="
-          cat ./community/data/geolocation-!cn || echo "File not found!"
+          #echo "===== ./community/data/geolocation-!cn content ====="
+          #cat ./community/data/geolocation-!cn || echo "File not found!"
           echo "===== ./community/data/google-cn content ====="
           cat ./community/data/google-cn || echo "File not found!"
           echo "-----------------------------"
