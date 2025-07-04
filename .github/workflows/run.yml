@@ -86,18 +86,18 @@ jobs:
       - name: Remove domains from "need-to-remove" lists in "hidden" branch
         run: |
           diff ./direct-need-to-remove.txt ./direct-list-without-redundant | awk '/^>/{print $2}' > temp-cn.txt
-          diff ./proxy-need-to-remove.txt ./proxy-list-without-redundant | awk '/^>/{print $2}' > temp-geolocation-\!cn.txt
+          diff ./proxy-need-to-remove.txt ./proxy-list-without-redundant | awk '/^>/{print $2}' > temp-geolocation-!cn.txt
 
       - name: Write lists to data directory
         run: |
           cat temp-cn.txt | sort --ignore-case -u | perl -ne '/^((?=^.{1,255})[a-zA-Z0-9][-_a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-_a-zA-Z0-9]{0,62})*)/ && print "$1\n"' > ./community/data/cn
-          cat temp-geolocation-\!cn.txt > ./community/data/geolocation-\!cn
+          cat temp-geolocation-!cn.txt > ./community/data/geolocation-!cn
 
-      - name: Add `full`, `regexp` and `keyword` type of rules back into "cn", "geolocation-!cn" and "category-ads-all" list
+      - name: Add `full`, `regexp` and `keyword` type of rules back into "cn", "geolocation-!cn" list
         run: |
           [ -f "direct-reserve.txt" ] && cat direct-reserve.txt >> ./community/data/cn
           cp ./community/data/cn direct-list.txt
-          cp ./community/data/geolocation-\!cn proxy-list.txt
+          cp ./community/data/geolocation-!cn proxy-list.txt
 
       - name: Create `china-list`、`google-cn`、`apple-cn`、`gfw`、`greatfire` lists
         run: |
