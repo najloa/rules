@@ -37,17 +37,16 @@ jobs:
           declare -a buffer
 
           FILES=(
-            category-entertainment category-media category-vpnservices category-porn
+            category-media category-vpnservices category-porn
             category-forums category-anticensorship google openai github steam
             yandex reddit meta x telegram demonoid piratebay btdig nyaa jwplayer
             pikpak 1337x rarbg dmm vk z-library netflix yahoo 4plebs mega bluesky
-            linkedin primevideo imgur streamable rumble wikimedia
+            linkedin primevideo imgur streamable rumble wikimedia bahamut bandcamp
+            niconico pixiv spotify tiktok twitch vimeo volmoe deviantart abema
           )
 
           deletecnlist=(
-            category-entertainment category-media category-vpnservices
-            category-porn category-forums category-anticensorship
-            linkedin steam
+            category-media category-forums linkedin steam netflix spotify twitch vimeo
           )
 
           for fname in "${deletecnlist[@]}"; do deletecnmap["$fname"]=1; done
@@ -114,12 +113,12 @@ jobs:
         uses: Mattraks/delete-workflow-runs@main
         with:
           retain_days: 0
-          keep_minimum_runs: 1
+          keep_minimum_runs: 0
 
       - name: Remove old Releases
         uses: dev-drprasad/delete-older-releases@master
         with:
-          keep_latest: 1
+          keep_latest: 0
           delete_tags: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
