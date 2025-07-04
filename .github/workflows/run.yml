@@ -115,7 +115,7 @@ jobs:
           sed -E -i 's/(flag\.String\("exportlists", ")[^"]*/\1geolocation-!cn/' ./custom/main.go
           echo "-----------------------------"
           rm -f ./community/data/0x0
-          : > ./community/data/115
+          rm -f ./community/data/115
           : > ./community/data/1337x
           : > ./community/data/17zuoye
           : > ./community/data/18comic
