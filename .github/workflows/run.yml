@@ -24,7 +24,6 @@ jobs:
           echo "GOOGLE_DOMAINS_URL=https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/google.china.conf" >> $GITHUB_ENV
           echo "APPLE_DOMAINS_URL=https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/apple.china.conf" >> $GITHUB_ENV
           echo "CUSTOM_DIRECT=https://raw.githubusercontent.com/Loyalsoldier/domain-list-custom/release/cn.txt" >> $GITHUB_ENV
-          echo "CUSTOM_PROXY=https://github.com/najloa/v2ray-rules-dat/raw/refs/heads/main/geolocation-!cn" >> $GITHUB_ENV
         shell: bash
 
       - name: Checkout the "main" branch of this repo
@@ -44,23 +43,11 @@ jobs:
           repository: v2fly/domain-list-community
           path: community
 
-      - name: Checkout cokebar/gfwlist2dnsmasq
-        uses: actions/checkout@v4
-        with:
-          repository: cokebar/gfwlist2dnsmasq
-          path: gfwlist2dnsmasq
-
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
           go-version-file: ./custom/go.mod
           cache-dependency-path: ./custom/go.sum
-
-      - name: Generate GFWList domains
-        run: |
-          cd gfwlist2dnsmasq || exit 1
-          chmod +x ./gfwlist2dnsmasq.sh
-          ./gfwlist2dnsmasq.sh -l -o ./temp-gfwlist.txt
 
       - name: Get and add direct domains into temp-direct.txt file
         run: |
@@ -109,7 +96,6 @@ jobs:
       - name: Add `full`, `regexp` and `keyword` type of rules back into "cn", "geolocation-!cn" and "category-ads-all" list
         run: |
           [ -f "direct-reserve.txt" ] && cat direct-reserve.txt >> ./community/data/cn
-          #[ -f "proxy-reserve.txt" ] && cat proxy-reserve.txt >> ./community/data/geolocation-\!cn
           cp ./community/data/cn direct-list.txt
           cp ./community/data/geolocation-\!cn proxy-list.txt
 
