@@ -10,14 +10,12 @@ on:
     paths:
       - "**/data.yml"
 jobs:
-  merge-and-push:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout current repository
-        uses: actions/checkout@v3
-        with:
-          ref: main
+      - name: Checkout your repository
+        uses: actions/checkout@v4
 
       - name: Clone domain-list-community
         run: |
@@ -25,88 +23,77 @@ jobs:
 
       - name: Merge and clean domain files
         run: |
-          # 创建输出目录
+          set -euo pipefail
+
           mkdir -p publish
           DATA_DIR="domain-list-community/data"
-          OUTPUT_RAW="publish/geolocation-\!cn_raw"
+          OUTPUT_RAW="publish/geolocation-!cn_raw"
+          OUTPUT_FINAL="publish/geolocation-!cn"
+
           > "$OUTPUT_RAW"
-          
-          # 声明两个哈希表（关联数组）
-          declare -A processed      # 用于记录哪些文件已处理，避免重复/死循环
-          declare -A deletecnmap    # 标记哪些文件需要“开启 delete_cn_flag”
-          
-          # 配置你希望合并的入口文件
-          FILES=("category-entertainment" "category-media" "category-vpnservices" "category-porn" "category-forums" "category-anticensorship" "google" "openai" "github" "steam" "yandex" "reddit" "meta" "x" "telegram" "demonoid" "piratebay" "btdig" "nyaa" "jwplayer" "pikpak" "1337x" "rarbg" "dmm" "vk" "z-library" "netflix" "yahoo" "4plebs" "mega" "bluesky" "linkedin" "primevideo" "imgur" "streamable" "rumble" "wikimedia")
-          
-          # 这些文件中含 @cn 的行会被整行删除，并传染到 include 子文件
-          deletecn=("category-entertainment" "category-media" "category-vpnservices" "category-porn" "category-forums" "category-anticensorship" "linkedin" "steam")
-          
-          # 构建快速查找表
-          for dfile in "${deletecn[@]}"; do
-            deletecnmap[$dfile]=1
-          done
-          
-          # 递归处理文件函数（第二个参数是 delete_cn_flag: 0 或 1）
+
+          declare -A processed
+          declare -A deletecnmap
+          declare -a buffer
+
+          FILES=(
+            category-entertainment category-media category-vpnservices category-porn
+            category-forums category-anticensorship google openai github steam
+            yandex reddit meta x telegram demonoid piratebay btdig nyaa jwplayer
+            pikpak 1337x rarbg dmm vk z-library netflix yahoo 4plebs mega bluesky
+            linkedin primevideo imgur streamable rumble wikimedia
+          )
+
+          deletecnlist=(
+            category-entertainment category-media category-vpnservices
+            category-porn category-forums category-anticensorship
+            linkedin steam
+          )
+
+          for fname in "${deletecnlist[@]}"; do deletecnmap["$fname"]=1; done
+
           process_file() {
             local name="$1"
             local delete_cn_flag="$2"
-          
-            # 如果该文件已经处理过，直接跳过
-            if [[ -n "${processed[$name]}" ]]; then return 0; fi
-            processed[$name]=1
-          
-            local path="$DATA_DIR/$name"
-            if [[ ! -f "$path" ]]; then
-              echo "::warning:: Skipping missing file: $path"
+
+            if [[ -n "${processed[$name]:-}" ]]; then return 0; fi
+            processed["$name"]=1
+
+            local filepath="$DATA_DIR/$name"
+            if [[ ! -f "$filepath" ]]; then
+              echo "::warning:: Skipping missing file: $filepath"
               return 0
             fi
-          
-            # 如果当前文件在 deletecnmap 中，强制开启 delete_cn_flag
-            if [[ -n "${deletecnmap[$name]}" ]]; then
-              delete_cn_flag=1
-            fi
-          
-            local temp_clean="/tmp/cleaned_$name.txt"
-            > "$temp_clean"
-          
-            # 逐行处理当前文件
+
+            [[ -n "${deletecnmap[$name]:-}" ]] && delete_cn_flag=1
+
             while IFS= read -r line || [[ -n "$line" ]]; do
+              line="${line%%[[:space:]]#*}"
+              line="${line//[[:space:]]/}"
+              [[ -z "$line" ]] && continue
+
               if [[ "$line" =~ ^include:([a-zA-Z0-9._-]+)$ ]]; then
-                # 如果是 include:xxx，递归处理子文件，并传递当前的 delete_cn_flag
-                include_name="${BASH_REMATCH[1]}"
-                process_file "$include_name" "$delete_cn_flag"
+                child="${BASH_REMATCH[1]}"
+                process_file "$child" "$delete_cn_flag"
+              elif [[ "$delete_cn_flag" -eq 1 && "$line" == *@cn* ]]; then
                 continue
               else
-                # 如果 delete_cn_flag 开启，并且该行包含 @cn，则整行跳过
-                if [[ "$delete_cn_flag" == "1" && "$line" == *@cn* ]]; then
-                  continue
-                fi
-                echo "$line" >> "$temp_clean"
+                buffer+=("$line")
               fi
-            done < "$path"
-          
-            echo ">>> finished processing $name"
-            # 合并当前文件内容到输出原始文件
-            cat "$temp_clean" >> "$OUTPUT_RAW"
-            rm -f "$temp_clean"
+            done < "$filepath"
+
+            echo "✓ Processed $name"
           }
-          
-          # 开始处理入口文件
-          for file in "${FILES[@]}"; do
-            process_file "$file" "0"   # 初始状态为不删除 @cn，除非后面继承
+
+          for entry in "${FILES[@]}"; do
+            process_file "$entry" 0
           done
-          
-          # 最终清洗：去空行、注释、@后缀、空格，排序去重
-          awk '
-            /^[[:space:]]*$/ { next }              # 去掉空行
-            /^[[:space:]]*#/ { next }              # 去掉注释行
-            {
-              sub(/[[:space:]]*#.*$/, "")          # 删除 # 后的注释
-              gsub(/[[:space:]]+/, "")             # 删除所有空格
-              sub(/@.*/, "")                       # 删除 @ 后缀
-              print
-            }
-          ' "$OUTPUT_RAW" | sort -u > publish/geolocation-\!cn
+
+          printf "%s\n" "${buffer[@]}" |
+            sed -E '/^\s*$/d; s/@.*//; s/\s+//g' |
+            grep -v '^#' |
+            sort -u > "$OUTPUT_FINAL"
+#' "$OUTPUT_RAW" | sort -u > publish/geolocation-\!cn
 
       - name: Commit and push geolocation-!cn
         run: |
