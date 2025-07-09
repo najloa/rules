@@ -1,4 +1,6 @@
 code.jquery.com
+fc2ppvdb.com
+catbox.moe
 substack.com
 hostloc.com
 newsweek.com
