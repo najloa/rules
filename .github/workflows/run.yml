@@ -1556,14 +1556,16 @@ jobs:
           git checkout rules || git checkout -b rules
           
           # 清理旧文件
-          find . -mindepth 1 -not -name '.github' -exec rm -rf {} +
+          ls -al
+          
 
           # 复制新构建文件
           cp -r ../publish/* ./
 
           git add .
           git commit -m "${{ env.RELEASE_NAME }}" || echo "Nothing to commit"
-          git push origin rules
+          #git push origin rules
+          git push -f origin rules
 
       #- name: Purge jsdelivr CDN
       #  run: |
