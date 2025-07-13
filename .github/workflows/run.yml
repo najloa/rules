@@ -1555,8 +1555,8 @@ jobs:
           
           git checkout rules || git checkout -b rules
           
-          # 清理旧文件（如果需要）
-          #rm -rf ./*
+          # 清理旧文件
+          find . -mindepth 1 -not -name '.github' -exec rm -rf {} +
 
           # 复制新构建文件
           cp -r ../publish/* ./
