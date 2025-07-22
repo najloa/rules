@@ -1,4 +1,4 @@
-code.jquery.com
+simpcity.cr
 platracker.com
 tinyurl.com
 kwongwah.com.my
