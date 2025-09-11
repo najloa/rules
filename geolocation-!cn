@@ -66,6 +66,4 @@ include:webtype
 include:dmm
 include:z-library
 include:category-entertainment
-
-# category-orgs
 include:archive
