@@ -62,10 +62,10 @@ jobs:
 
       #- name: Create `china-list`、`google-cn`、`apple-cn`、`gfw`、`greatfire` lists # 生成各类辅助列表
         #run: |
-          #curl -sSL $GOOGLE_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "full:$1\n"' > ./community/data/google-cn
-          #curl -sSL $GOOGLE_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "full:$1\n"' > google-cn.txt
-          #echo "www.recaptcha.net" >> ./community/data/google-cn
-          #echo "www.recaptcha.net" >> ./google-cn.txt
+          curl -sSL $GOOGLE_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "full:$1\n"' > ./community/data/google-cn
+          curl -sSL $GOOGLE_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "full:$1\n"' > google-cn.txt
+          echo "www.recaptcha.net" >> ./community/data/google-cn
+          echo "www.recaptcha.net" >> ./google-cn.txt
 
       - name: Build geosite.dat file # 构建 geosite.dat 文件
         run: |
