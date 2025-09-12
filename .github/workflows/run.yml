@@ -51,8 +51,8 @@ jobs:
       - name: Remove redundant domains
         run: |
           #cp ./cnlist.py ./community/data/cnlist.py
-          #\cp -f ./geolocation-\!cn ./community/data/geolocation-\!cn
-          cp ./userproxy ./community/data/
+          \cp -f ./geolocation-\!cn ./community/data/geolocation-\!cn
+          #cp ./userproxy ./community/data/
           # sed -i '/include:mihoyo/d' ./community/data/category-entertainment
           #cd ./community/data/
           #chmod +x cnlist.py
