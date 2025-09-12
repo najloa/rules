@@ -1,14 +1,25 @@
+# This list contains domains that don't have access point in China mainland. This is opposite to geolocation-cn.
 
-# User scripts
-greasyfork.org
+include:userproxy
+
+# Torrent websites
 include:1337x
 include:btdig
 include:demonoid
 include:nyaa
 include:piratebay
 include:rarbg
+
+# Media & News & Press
 include:category-media
+
+# User scripts
+greasyfork.org
+
+# VPN services
 include:category-vpnservices
+
+# Wiki
 include:fandom
 include:miraheze
 include:scp
@@ -16,23 +27,48 @@ include:translatewiki
 include:wikidot
 include:wikihow
 include:wikimedia
+
+atwiki.jp
+touhouwiki.net
+
+# Porn
 include:category-porn
+
+# Forums & Social network
 include:category-forums
 include:category-social-media-!cn
+
+# Anti-censorship & Anti-GFW & Privacy protection & VPN tools
 include:category-anticensorship
+
+# category-companies
 include:google
 include:yahoo
 include:yandex
 include:meta
 include:x
+
+# AI Chat
 include:category-ai-!cn
+
+# category-dev
 include:github
+
+# category-games-!cn
 include:steam
+
+# Others
 include:avaxhome
 include:dlsite
+
+# Communications
 include:category-communication
+
+# geolocation-!cn
 include:jwplayer
 include:mega
+
+# File & Image & Video hosting
 include:0x0
 include:casimages
 include:cloudinary
@@ -50,6 +86,8 @@ include:postimages
 include:pstorage
 include:rumble
 include:streamable
+
+# Art & Design & Photography
 include:artstation
 include:dribbble
 include:dyna
@@ -66,7 +104,15 @@ include:realtype
 include:typenetwork
 include:typography
 include:webtype
+
+# category-ecommerce
 include:dmm
+
+# category-scholar-!cn
 include:z-library
+
+# Entertainment & Games & Music & Podcasts & Videos
 include:category-entertainment
+
+# category-orgs
 include:archive
