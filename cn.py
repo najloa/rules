@@ -27,7 +27,7 @@ def expand_file(infile, fout, visited=None):
 
 def main():
     input_file = "cn"   # 输入文件
-    output_file = "cn.txt"  # 输出文件
+    output_file = "cnlist.txt"  # 输出文件
     with open(output_file, "w") as fout:
         expand_file(input_file, fout)
 
