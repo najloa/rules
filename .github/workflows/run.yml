@@ -52,16 +52,16 @@ jobs:
         run: |
           ls ./
           cp ./cnlist.py ./community/data/cnlist.py
-          cp ./proxylist.py ./community/data/proxylist.py
+          #cp ./proxylist.py ./community/data/proxylist.py
           \cp -f ./geolocation-cn ./community/data/geolocation-cn
           \cp -f ./geolocation-!cn ./community/data/geolocation-!cn
           cat userproxy >> ./community/data/geolocation-!cn
           sed -i '/include:mihoyo/d' ./community/data/category-entertainment
           cd ./community/data/
           chmod +x cnlist.py
-          chmod +x proxylist.py
-          ./cnlist.py
-          ./proxylist.py
+          #chmod +x proxylist.py
+          ./cnlist.py cn cnlist.txt
+          #./proxylist.py
 
       - name: Create `china-list`、`google-cn`、`apple-cn`、`gfw`、`greatfire` lists # 生成各类辅助列表
         run: |
