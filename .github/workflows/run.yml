@@ -79,6 +79,7 @@ jobs:
           rm -f ./community/data/mihoyo
           # cp ./speedup ./community/data/speedup
           # cp ./twitchcdn ./community/data/twitchcdn
+          find . -type f ! -name "proxylist.txt" ! -name "google" -exec sed -i '/@cn/d' {} +
 
           rm -f ./community/data/115
           rm -f ./community/data/17zuoye
