@@ -50,6 +50,7 @@ jobs:
 
       - name: Remove redundant domains
         run: |
+          ls ./
           chmod +x cnlist.py
           ./cnlist.py
           cat userproxy >> ./community/data/geolocation-!cn
