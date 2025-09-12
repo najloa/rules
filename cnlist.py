@@ -11,18 +11,20 @@ def expand_file(infile, fout, visited=None):
     if visited is None:
         visited = set()
     if infile in visited:
-        raise ValueError(f"循环 include 检测到: {infile}")
+        # 改成跳过而不是报错
+        print(f"[警告] 跳过循环 include: {infile}")
+        return
     visited.add(infile)
 
     with open(infile, "r", encoding="utf-8") as fin:
         for line in fin:
             stripped = line.strip()
             if stripped.startswith("include:"):
-                # 去掉注释部分
                 content = stripped.split("#", 1)[0].strip()
                 fname = content.split(":", 1)[1].strip()
                 if not os.path.isfile(fname):
-                    raise FileNotFoundError(f"被 include 的文件不存在: {fname}")
+                    print(f"[警告] 被 include 的文件不存在: {fname}")
+                    continue
                 expand_file(fname, fout, visited)
             else:
                 fout.write(line)
