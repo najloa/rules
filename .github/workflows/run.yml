@@ -54,14 +54,14 @@ jobs:
           cp ./cnlist.py ./community/data/cnlist.py
           #cp ./proxylist.py ./community/data/proxylist.py
           \cp -f ./geolocation-cn ./community/data/geolocation-cn
-          \cp -f ./geolocation-!cn ./community/data/geolocation-!cn
+          \cp -f ./geolocation-!cn ./community/data/geolocation-\!cn
           cp ./userproxy ./community/data/
           sed -i '/include:mihoyo/d' ./community/data/category-entertainment
           cd ./community/data/
           chmod +x cnlist.py
           #chmod +x proxylist.py
           ./cnlist.py cn cnlist.txt
-          ./cnlist.py geolocation-!cn proxylist.txt
+          #./cnlist.py geolocation-\!cn proxylist.txt
           #./proxylist.py
 
       - name: Create `china-list`、`google-cn`、`apple-cn`、`gfw`、`greatfire` lists # 生成各类辅助列表
@@ -87,7 +87,7 @@ jobs:
       - name: Move and zip files and generate sha256 hash # 移动、打包及生成校验码
         run: |
           install -Dp ./custom/publish/geosite.dat ./publish/geosite.dat
-          install -p {google-cn,cnlist,proxylist}.txt ./publish/
+          install -p {google-cn,cnlist}.txt ./publish/
           cd ./publish || exit 1
           sha256sum geosite.dat > geosite.dat.sha256sum # 生成 geosite.dat 校验
 
