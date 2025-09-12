@@ -1,6 +1,6 @@
-#name: 代理域名列表
+name: 代理域名列表
 
-#on:
+on:
   workflow_dispatch:
   schedule:
     - cron: '0 21 * * *'  # 每天执行
@@ -9,7 +9,7 @@
       - main
     paths:
       - "**/data.yml"
-#jobs:
+jobs:
   build:
     runs-on: ubuntu-latest
 
