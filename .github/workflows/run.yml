@@ -50,12 +50,17 @@ jobs:
 
       - name: Remove redundant domains
         run: |
-          ls ./
-          chmod +x cnlist.py
-          ./cnlist.py
+          ls ./community/
+          cp ./cnlist.py ./community/data/cnlist.py
+          cp ./proxylist.py ./community/data/proxylist.py
+          \cp -f ./geolocation-cn ./community/data/geolocation-cn
+          \cp -f ./geolocation-!cn ./community/data/geolocation-!cn
           cat userproxy >> ./community/data/geolocation-!cn
           sed -i '/include:mihoyo/d' ./community/data/category-entertainment
+          cd /community/data/
+          chmod +x cnlist.py
           chmod +x proxylist.py
+          ./cnlist.py
           ./proxylist.py
 
       - name: Create `china-list`、`google-cn`、`apple-cn`、`gfw`、`greatfire` lists # 生成各类辅助列表
