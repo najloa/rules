@@ -94,10 +94,10 @@ jobs:
       - name: Move and zip files and generate sha256 hash # 移动、打包及生成校验码
         run: |
           install -Dp ./custom/publish/geosite.dat ./publish/geosite.dat
-          ls
-          echo "------11111111--------"
-          ls ./community/data
-          install -p {geolocation-\!cn,geolocation-cn,google-cn}.txt ./publish/
+          install -Dp ./community/data/geolocation-\!cn.txt ./publish/geolocation-\!cn.txt
+          install -Dp ./community/data/geolocation-cn.txt ./publish/geolocation-cn.txt
+          echo "--------------"
+          install -p google-cn.txt ./publish/
           cd ./publish || exit 1
           sha256sum geosite.dat > geosite.dat.sha256sum # 生成 geosite.dat 校验
 
