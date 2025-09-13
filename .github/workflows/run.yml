@@ -58,6 +58,8 @@ jobs:
           sed -i '/amp-api.podcast.apple.com/d' ./community/data/category-entertainment
           sed -i '/bag.itunes.apple.com/d' ./community/data/category-entertainment
           sed -i '/bookeeper.itunes.apple.com/d' ./community/data/category-entertainment
+          find ./community/data/ -type f ! -name "google" -exec grep -H "@cn" {} + > cn.txt
+          find ./community/data/ -type f ! -name "proxylist.txt" ! -name "google" ! -name "cn.txt" -exec sed -i '/@cn/d' {} +
           cd ./community/data/
           chmod +x include.py
           ./include.py geolocation-\!cn proxylist.txt --remove-cn --keep-include google
@@ -79,8 +81,6 @@ jobs:
           rm -f ./community/data/mihoyo
           # cp ./speedup ./community/data/speedup
           # cp ./twitchcdn ./community/data/twitchcdn
-          find ./community/data/ -type f ! -name "proxylist.txt" ! -name "google" -exec sed -i '/@cn/d' {} +
-          find ./community/data/ -type f ! -name "google" -exec grep -H "@cn" {} + > ./cncn.txt
 
           rm -f ./community/data/115
           rm -f ./community/data/17zuoye
@@ -1045,7 +1045,7 @@ jobs:
           install -Dp ./custom/publish/geosite.dat ./publish/geosite.dat
           install -Dp ./community/data/proxylist.txt ./publish/proxylist.txt
           install -p google-cn.txt ./publish/
-          install -p cncn.txt ./publish/
+          install -p cn.txt ./publish/
           cd ./publish || exit 1
           sha256sum geosite.dat > geosite.dat.sha256sum # 生成 geosite.dat 校验
 
