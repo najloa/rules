@@ -57,22 +57,8 @@ jobs:
           sed -i '/include:mihoyo/d' ./community/data/category-entertainment
           sed -i '/include:category-games-\!cn/d' ./community/data/category-entertainment
           chmod +x includetolist.py
-          ./includetolist.py -i1 ./community/data/geolocation-\!cn -o1 ./community/data/geolocation-\!cn.txt -i2 ./community/data/geolocation-cn -o2 ./community/data/geolocation-cn.txt --remove-cn --keep-include google
+          ./includetolist.py -i1 ./community/data/geolocation-!cn -o1 ./community/data/geolocation-!cn.txt -i2 ./community/data/geolocation-cn -o2 ./community/data/geolocation-cn.txt --remove-cn --keep-include google
 
-          
-          
-          
-          
-          #cp ./include.py ./community/data/include.py
-          #find ./community/data/ -type f ! -name "google" ! -name "include.py" -exec grep -H "@cn" {} + > temp-cn.txt
-          #sed 's/^[^:]*://' temp-cn.txt >> ./community/data/cn
-          #find ./community/data/ -type f ! -name "proxylist.txt" ! -name "google" ! -name "cn.txt" ! -name "include.py" -exec sed -i '/@cn/d' {} +
-          #ls
-          #cd ./community/data/
-          #chmod +x include.py
-          #./include.py geolocation-\!cn proxylist.txt --remove-cn --keep-include google
-          #./include.py geolocation-cn cn.txt
-          #rm -f ./include.py
           #rm -f ./community/data/category-games-!cn
           #rm -f ./community/data/mihoyo
           # cp ./speedup ./community/data/speedup
