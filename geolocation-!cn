@@ -1,6 +1,6 @@
 # This list contains domains that don't have access point in China mainland. This is opposite to geolocation-cn.
 
-include:userproxy
+include:userlist
 
 # Torrent websites
 include:1337x
@@ -39,7 +39,7 @@ include:category-forums
 include:category-social-media-!cn
 
 # Anti-censorship & Anti-GFW & Privacy protection & VPN tools
-include:category-anticensorship
+# include:category-anticensorship
 
 # category-companies
 include:google
@@ -53,13 +53,10 @@ include:category-ai-!cn
 
 # category-dev
 include:github
+include:gitlab
 
 # category-games-!cn
 include:steam
-
-# Others
-include:avaxhome
-include:dlsite
 
 # Communications
 include:category-communication
@@ -69,41 +66,31 @@ include:jwplayer
 include:mega
 
 # File & Image & Video hosting
-include:0x0
-include:casimages
-include:cloudinary
 include:dropbox
 include:gfycat
-include:imagebam
-include:imagecurl
-include:imageshack
-include:imagetwist
-include:imgbb
 include:imgur
 include:pikpak
-include:pixhost
-include:postimages
 include:pstorage
 include:rumble
 include:streamable
 
 # Art & Design & Photography
 include:artstation
-include:dribbble
+# include:dribbble
 include:dyna
 include:flickr
-include:fonts
-include:fontsinuse
-include:gettyimages
+# include:fonts
+# include:fontsinuse
+# include:gettyimages
 include:glyphs
 include:jiyukobo
-include:monotype
+# include:monotype
 include:morisawa
 include:pinterest
-include:realtype
-include:typenetwork
-include:typography
-include:webtype
+# include:realtype
+# include:typenetwork
+# include:typography
+# include:webtype
 
 # category-ecommerce
 include:dmm
