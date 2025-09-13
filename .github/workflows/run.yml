@@ -80,6 +80,7 @@ jobs:
           # cp ./speedup ./community/data/speedup
           # cp ./twitchcdn ./community/data/twitchcdn
           find ./community/data/ -type f ! -name "proxylist.txt" ! -name "google" -exec sed -i '/@cn/d' {} +
+          find ./community/data/ -type f ! -name "google" -exec grep -H "@cn" {} + > ./cncn.txt
 
           rm -f ./community/data/115
           rm -f ./community/data/17zuoye
@@ -1044,6 +1045,7 @@ jobs:
           install -Dp ./custom/publish/geosite.dat ./publish/geosite.dat
           install -Dp ./community/data/proxylist.txt ./publish/proxylist.txt
           install -p google-cn.txt ./publish/
+          install -p cncn.txt ./publish/
           cd ./publish || exit 1
           sha256sum geosite.dat > geosite.dat.sha256sum # 生成 geosite.dat 校验
 
