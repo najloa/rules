@@ -60,13 +60,13 @@ jobs:
           sed -i '/bag.itunes.apple.com/d' ./community/data/category-entertainment
           sed -i '/bookeeper.itunes.apple.com/d' ./community/data/category-entertainment
           find ./community/data/ -type f ! -name "google" ! -name "include.py" -exec grep -H "@cn" {} + > temp-cn.txt
+          sed 's/^[^:]*://' temp-cn.txt >> ./community/data/cn
           find ./community/data/ -type f ! -name "proxylist.txt" ! -name "google" ! -name "cn.txt" ! -name "include.py" -exec sed -i '/@cn/d' {} +
           ls
           cd ./community/data/
           chmod +x include.py
           ./include.py geolocation-\!cn proxylist.txt --remove-cn --keep-include google
           ./include.py geolocation-cn cn.txt
-          sed 's/^[^:]*://' temp-cn.txt >> cn.txt
           rm -f ./include.py
 
       - name: Create `china-list`、`google-cn`、`apple-cn`、`gfw`、`greatfire` lists # 生成各类辅助列表
