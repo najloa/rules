@@ -68,6 +68,8 @@ jobs:
           cp ./twitchcdn ./community/data/twitch-cdn
           cp ./twitchcdn ./twitch-cdn.txt
           # cp ./speedup ./community/data/speed-up
+          find . -type f -name "*.txt"
+          find . -type f -name "google*"
 
       - name: Build geosite.dat file # 构建 geosite.dat 文件
         run: |
