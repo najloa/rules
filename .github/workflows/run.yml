@@ -8,7 +8,7 @@ on:
     paths:
       - "**/run.yml" # 文件的变动时触发
       - "**/geolocation-!cn"
-      - "**/proxy.txt"
+      - "**/userlist"
       - "**/twitchcdn"
       - "**/speedup"
   schedule:
