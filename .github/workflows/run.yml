@@ -6,9 +6,7 @@ on:
     branches:
       - main # 分支有推送时触发
     paths:
-      #- "**/run.yml" # 文件的变动时触发
-      - "**/geolocation-!cn"
-      - "**/userlist"
+      - "**/userlist" # 文件的变动时触发
   schedule:
     - cron: "0 22 * * *" # 每天 22:00 自动触发
 jobs:
@@ -19,8 +17,6 @@ jobs:
         run: |
           echo "RELEASE_NAME=Released on $(date +%Y%m%d%H%M)" >> $GITHUB_ENV # 发布名称
           echo "TAG_NAME=$(date +%Y%m%d%H%M)" >> $GITHUB_ENV # 标签名称
-          # 设置各类域名和广告规则的下载链接
-          echo "GOOGLE_DOMAINS_URL=https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/google.china.conf" >> $GITHUB_ENV
         shell: bash
 
       - name: Checkout the "main" branch of this repo # 检出本仓库的 main 分支
@@ -51,18 +47,14 @@ jobs:
           \cp -f ./geolocation-\!cn ./community/data/geolocation-\!cn
           \cp -f ./geolocation-cn ./community/data/geolocation-cn
           \cp -f ./userlist ./community/data/userlist
-          sed -i '/apple/d' ./community/data/category-entertainment
-          sed -i '/include:mihoyo/d' ./community/data/category-entertainment
           sed -i '/include:category-games-\!cn/d' ./community/data/category-entertainment
-          chmod +x includetolist.py
-          ./includetolist.py -i1 ./community/data/geolocation-!cn -o1 ./proxy.txt -i2 ./community/data/geolocation-cn -o2 ./cn.txt --remove-cn --keep-include google --cntocn
+          #chmod +x includetolist.py
+          #./includetolist.py -i1 ./community/data/geolocation-!cn -o1 ./proxy.txt -i2 ./community/data/geolocation-cn -o2 ./cn.txt --remove-cn --keep-include google --cntocn
 
       - name: Create `china-list`、`google-cn`、`apple-cn`、`gfw`、`greatfire` lists # 生成各类辅助列表
         run: |
-          curl -sSL $GOOGLE_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "full:$1\n"' > ./community/data/google-cn
-          curl -sSL $GOOGLE_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "full:$1\n"' > google-cn.txt
-          echo "www.recaptcha.net" >> ./community/data/google-cn
-          echo "www.recaptcha.net" >> ./google-cn.txt
+          #echo "www.recaptcha.net" >> ./community/data/google-cn
+          #echo "www.recaptcha.net" >> ./google-cn.txt
           cp ./twitchcdn ./community/data/twitch-cdn
           cp ./twitchcdn ./twitch-cdn.txt
           # cp ./speedup ./community/data/speed-up
@@ -78,7 +70,7 @@ jobs:
         run: |
           install -Dp ./custom/publish/geosite.dat ./publish/geosite.dat
           echo "--------------"
-          install -p {twitch-cdn,google-cn,proxy,cn}.txt ./publish/
+          install -p {twitch-cdn,proxy,cn}.txt ./publish/
           cd ./publish || exit 1
           sha256sum geosite.dat > geosite.dat.sha256sum # 生成 geosite.dat 校验
 
