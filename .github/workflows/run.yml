@@ -51,6 +51,7 @@ jobs:
           #echo "www.recaptcha.net" >> ./google-cn.txt
           cp ./twitchcdn ./community/data/twitch-cdn
           cp ./twitchcdn ./twitch-cdn.txt
+          ls
           # cp ./speedup ./community/data/speed-up
           # find . -type f -name "*.txt"
           # find . -type f -name "google*"
@@ -62,7 +63,8 @@ jobs:
 
       - name: Move and zip files and generate sha256 hash # 移动、打包及生成校验码
         run: |
-          install -Dp ./community/publish/geosite.dat ./publish/geosite.dat
+          find . -type f -name "geosite.dat"
+          #install -Dp ./community/publish/geosite.dat ./publish/geosite.dat
           echo "--------------"
           install -p {twitch-cdn,proxy,cn}.txt ./publish/
           cd ./publish || exit 1
