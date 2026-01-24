@@ -60,11 +60,12 @@ jobs:
         run: |
           cd community || exit 1
           go run ./
+          find . -type f -name "dlc.dat"
+          ls
 
       - name: Move and zip files and generate sha256 hash # 移动、打包及生成校验码
         run: |
-          find . -type f -name "geosite.dat"
-          #install -Dp ./community/publish/geosite.dat ./publish/geosite.dat
+          #install -Dp ./community/publish/dlc.dat ./publish/geosite.dat
           echo "--------------"
           install -p {twitch-cdn,proxy,cn}.txt ./publish/
           cd ./publish || exit 1
