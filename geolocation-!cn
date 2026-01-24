@@ -1,6 +1,109 @@
 # This list contains domains that don't have access point in China mainland. This is opposite to geolocation-cn.
 
-include:userlist
+# AI Chat
+include:category-ai-!cn
+
+# Anti-censorship & Anti-GFW & Privacy protection & VPN tools
+include:category-anticensorship
+include:category-proxy-tunnels
+
+# Art & Design & Photography
+include:artstation
+include:dyna
+include:flickr
+include:glyphs
+include:jiyukobo
+include:morisawa
+include:pinterest
+
+bunka.go.jp
+
+# Entertainment & Games & Music & Podcasts & Videos
+include:category-entertainment
+
+# File & Image & Video hosting
+include:0x0
+include:casimages
+include:cloudinary
+include:dropbox
+include:gfycat
+include:imagebam
+include:imagecurl
+include:imageshack
+include:imagetwist
+include:imgbb
+include:imgur
+include:pikpak
+include:pixhost
+include:postimages
+include:pstorage
+include:rumble
+include:streamable
+include:terabox
+
+# Forums & Social network
+include:category-forums
+include:category-social-media-!cn
+
+# Media & News & Press
+include:category-media
+include:pugpig
+
+# Porn
+include:category-porn
+
+# Services & Softwares
+include:category-android-app-download
+include:category-web-archive
+
+include:duckduckgo
+include:jwplayer
+include:mega
+
+## Aurora Open Source Software (https://gitlab.com/AuroraOSS)
+auroraoss.com
+## BiliPlus
+biliplus.com
+## CataBoom
+cataboom.com
+## Consent Management Platforms / Cookie service
+consentpro.com
+cookiepro.com
+cookielaw.org
+onetrust.com
+osano.com
+usercentrics.eu
+## Greasy Fork
+greasyfork.org
+## Online LaTeX Editor
+cloudlatex.io
+overleaf.com
+## Translator & Dictionary
+include:linguee
+collinsdictionary.com
+ldoceonline.com
+immersivetranslate.com # 沉浸式翻译 (国际版)
+## OriginLab (Graphing for Science and Engineering)
+originlab.com
+
+# Software development
+# include:category-dev
+include:gitbook
+include:github
+include:github1s
+include:gitlab
+
+# Tech companies
+# include:category-companies
+include:google
+include:meta
+include:yahoo
+include:yandex
+
+include:x
+
+civitai.com
+porkbun.com
 
 # Torrent websites
 include:1337x
@@ -9,12 +112,8 @@ include:demonoid
 include:nyaa
 include:piratebay
 include:rarbg
-
-# Media & News & Press
-include:category-media
-
-# User scripts
-greasyfork.org
+dmhy.org
+rutor.info
 
 # VPN services
 include:category-vpnservices
@@ -30,77 +129,9 @@ include:wikimedia
 
 atwiki.jp
 touhouwiki.net
+wiki.gg
 
-# Porn
-include:category-porn
-
-# Forums & Social network
-include:category-forums
-include:category-social-media-!cn
-
-# Anti-censorship & Anti-GFW & Privacy protection & VPN tools
-# include:category-anticensorship
-
-# category-companies
-include:google
-include:yahoo
-include:yandex
-include:meta
-include:x
-
-# AI Chat
-include:category-ai-!cn
-
-# category-dev
-include:github
-include:gitlab
-
-# category-games-!cn
-include:steam
-
-# Communications
-include:category-communication
-
-# geolocation-!cn
-include:jwplayer
-include:mega
-
-# File & Image & Video hosting
-include:dropbox
-include:gfycat
-include:imgur
-include:pikpak
-include:pstorage
-include:rumble
-include:streamable
-include:terabox
-
-# Art & Design & Photography
-include:artstation
-# include:dribbble
-include:dyna
-include:flickr
-# include:fonts
-# include:fontsinuse
-# include:gettyimages
-include:glyphs
-include:jiyukobo
-# include:monotype
-include:morisawa
-include:pinterest
-# include:realtype
-# include:typenetwork
-# include:typography
-# include:webtype
-
-# category-ecommerce
+# Others
 include:dmm
-
-# category-scholar-!cn
 include:z-library
-
-# Entertainment & Games & Music & Podcasts & Videos
-include:category-entertainment
-
-# category-orgs
-include:archive
+include:userlist
