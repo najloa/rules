@@ -44,7 +44,7 @@ jobs:
           sed -i '/include:category-games-\!cn/d' ./community/data/category-entertainment
           # 赋予执行权限
           chmod +x includetolist.py
-          ./includetolist.py -i ./community/data
+          ./includetolist.py -i ./community/data -o ./
 
       - name: Create lists # 生成各类辅助列表
         run: |
