@@ -2,6 +2,52 @@
 
 https://github.com/v2fly/domain-list-community
 
+域名规则说明
+域名规则（包括 domain、full、keyword 和 regexp）可以拥有零个、一个或多个属性 (Attributes)。每个属性都以 @ 开头，后接属性名称。这些属性会保留在最终生成的列表以及 dlc.dat 文件中。
+
+归属关系 (Affiliations)
+域名规则可以拥有零个、一个或多个归属关系，这会将该域名规则额外添加到所属的目标列表中。每个归属关系都以 & 开头，后接目标列表的名称（无论该目标在数据路径中是否有独立文件）。这是一种数据管理手段，不会保留在最终列表或 dlc.dat 中。
+
+包含机制 (Inclusion)
+包含操作以 include: 开头，后接另一个有效的域名列表名称。
+
+简单包含：在 lista 文件中使用 include:listb，意味着将 listb 中的所有域名规则添加到 lista 中。
+
+选择性包含：带有属性的包含操作。例如，include:listb @attr1 @-attr2 表示仅添加那些带有 @attr1 且不带有 @attr2 的域名规则。
+
+注意：包含机制属于特殊的数据管理类型，不会保留在最终列表或 dlc.dat 中。
+
+1. 属性 (Attributes) 的妙用
+场景： 你想区分同一个网站的手机端和电脑端流量。
+
+规则写法： domain:google.com @mobile @ads
+
+实际效果： 这个 @mobile 标签会被打包进 dlc.dat。当你在路由软件中通过 geosite:google@mobile 调用时，它只会匹配带有该属性的条目。
+
+2. 归属 (Affiliations) 的逻辑
+场景： 你在维护一个名为 streaming（流媒体）的列表，里面包含了 Netflix。但你希望 Netflix 的域名也自动出现在 us_site（美国网站）列表里，而不需要手动去两个文件里重复写。
+
+规则写法（在 streaming 文件中）： domain:netflix.com &us_site
+
+实际效果： * 在生成的 streaming 列表中有 netflix.com。
+
+在生成的 us_site 列表中也会自动出现 netflix.com。
+
+区别： 最终的 dlc.dat 里看不到 &us_site 这个字符，它只是编译过程中的“搬运工”。
+
+3. 选择性包含 (Selective Inclusion)
+场景： 你想创建一个“干净版”的社交媒体列表，包含 Facebook 但剔除其中的广告域名。
+
+前提： 假设 facebook 列表里有些规则带了 @ads 属性。
+
+规则写法（在你的新列表里）： include:facebook @-ads
+
+实际效果： 编译器会扫描 facebook 文件，把所有没有标记 @ads 的域名抓取过来。这避免了你重新写一遍域名的麻烦。
+
+
+
+
+
 [**V2Ray**](https://github.com/v2fly/v2ray-core) 路由规则文件加强版，可代替 V2Ray 官方 `geoip.dat` 和 `geosite.dat`，适用于 [V2Ray](https://github.com/v2fly/v2ray-core)、[Xray-core](https://github.com/XTLS/Xray-core)、[mihomo](https://github.com/MetaCubeX/mihomo/tree/Meta)、[hysteria](https://github.com/apernet/hysteria)、[Trojan-Go](https://github.com/p4gefau1t/trojan-go)、[leaf](https://github.com/eycorsican/leaf)。使用 GitHub Actions 北京时间每天早上 6 点自动构建，保证规则最新。
 
 ## 规则文件生成方式
