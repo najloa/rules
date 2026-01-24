@@ -51,23 +51,18 @@ jobs:
           #echo "www.recaptcha.net" >> ./google-cn.txt
           cp ./twitchcdn ./community/data/twitch-cdn
           cp ./twitchcdn ./twitch-cdn.txt
-          ls
-          # cp ./speedup ./community/data/speed-up
-          # find . -type f -name "*.txt"
-          # find . -type f -name "google*"
 
       - name: Build geosite.dat file # 构建 geosite.dat 文件
         run: |
           cd community || exit 1
           go run ./
-          find . -type f -name "dlc.dat"
+          find . -type f -name "google*"
           ls
 
       - name: Move and zip files and generate sha256 hash # 移动、打包及生成校验码
         run: |
-          #install -Dp ./community/publish/dlc.dat ./publish/geosite.dat
-          echo "--------------"
-          install -p {twitch-cdn,proxy,cn}.txt ./publish/
+          install -Dp ./community/dlc.dat ./publish/geosite.dat
+          #install -p {twitch-cdn,proxy,cn}.txt ./publish/
           cd ./publish || exit 1
           sha256sum geosite.dat > geosite.dat.sha256sum # 生成 geosite.dat 校验
 
