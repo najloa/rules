@@ -42,8 +42,9 @@ jobs:
           \cp -f ./geolocation-cn ./community/data/geolocation-cn
           \cp -f ./userlist ./community/data/userlist
           sed -i '/include:category-games-\!cn/d' ./community/data/category-entertainment
-          #chmod +x includetolist.py
-          #./includetolist.py -i1 ./community/data/geolocation-!cn -o1 ./proxy.txt -i2 ./community/data/geolocation-cn -o2 ./cn.txt --remove-cn --keep-include google --cntocn
+          # 赋予执行权限
+          chmod +x includetolist.py
+          ./includetolist.py -i ./community/data
 
       - name: Create lists # 生成各类辅助列表
         run: |
@@ -62,7 +63,7 @@ jobs:
       - name: Move and zip files and generate sha256 hash # 移动、打包及生成校验码
         run: |
           install -Dp ./community/dlc.dat ./publish/geosite.dat
-          #install -p {twitchcdn,proxy,cn}.txt ./publish/
+          install -p {twitchcdn,proxy,cn}.txt ./publish/
           cd ./publish || exit 1
           sha256sum geosite.dat > geosite.dat.sha256sum # 生成 geosite.dat 校验
 
