@@ -6,11 +6,9 @@ on:
     branches:
       - main # 分支有推送时触发
     paths:
-      - "**/run.yml" # 文件的变动时触发
+      #- "**/run.yml" # 文件的变动时触发
       - "**/geolocation-!cn"
       - "**/userlist"
-      - "**/twitchcdn"
-      - "**/speedup"
   schedule:
     - cron: "0 22 * * *" # 每天 22:00 自动触发
 jobs:
