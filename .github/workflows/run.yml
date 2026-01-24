@@ -24,12 +24,6 @@ jobs:
         with:
           ref: main
 
-      - name: Checkout Loyalsoldier/domain-list-custom # 检出自定义域名列表仓库
-        uses: actions/checkout@v5
-        with:
-          repository: Loyalsoldier/domain-list-custom
-          path: custom
-
       - name: Checkout v2fly/domain-list-community # 检出社区域名列表仓库
         uses: actions/checkout@v5
         with:
@@ -39,8 +33,8 @@ jobs:
       - name: Setup Go # 安装 Go 语言环境
         uses: actions/setup-go@v6
         with:
-          go-version-file: ./custom/go.mod
-          cache-dependency-path: ./custom/go.sum
+          go-version-file: ./community/go.mod
+          cache-dependency-path: ./community/go.sum
 
       - name: Remove redundant domains
         run: |
@@ -63,12 +57,12 @@ jobs:
 
       - name: Build geosite.dat file # 构建 geosite.dat 文件
         run: |
-          cd custom || exit 1
-          go run ./ --datapath=../community/data
+          cd community || exit 1
+          go run ./
 
       - name: Move and zip files and generate sha256 hash # 移动、打包及生成校验码
         run: |
-          install -Dp ./custom/publish/geosite.dat ./publish/geosite.dat
+          install -Dp ./community/publish/geosite.dat ./publish/geosite.dat
           echo "--------------"
           install -p {twitch-cdn,proxy,cn}.txt ./publish/
           cd ./publish || exit 1
