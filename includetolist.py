@@ -4,140 +4,99 @@ import os
 import re
 import sys
 
-def parse_args():
-    parser = argparse.ArgumentParser(description="Process include files into flat lists.")
-
-    # 支持 -i1/-o1, -i2/-o2 ...
-    for idx in range(1, 10):
-        parser.add_argument(f"-i{idx}", help=f"Input file {idx}")
-        parser.add_argument(f"-o{idx}", help=f"Output file {idx}")
-    parser.add_argument("-i", help="Single input file")
-    parser.add_argument("-o", help="Single output file")
-
-    parser.add_argument("--remove-cn", action="store_true",
-                        help="Remove lines containing @cn")
-    parser.add_argument("--keep-include", type=str, default="",
-                        help="Comma separated list of include files to preserve @cn lines")
-    parser.add_argument("--cntocn", action="store_true",
-                        help="If set, move all @cn lines into -i2/-o2 (or fallback to cn.txt)")
-    return parser.parse_args()
-
-
 def clean_line(line: str) -> str:
-    """移除注释 (# 及其后)，去掉空白。"""
+    """移除注释，去掉两端空白。"""
     line = re.split(r"\s+#", line, 1)[0]
     line = line.strip()
     if not line or line.startswith("#"):
         return ""
     return line
 
-
-def process_file(path, base_dir, seen, remove_cn, keep_includes, cn_lines, cntocn):
-    """递归处理文件，返回普通行，@cn 行根据选项加入 cn_lines。"""
-    if path in seen:
-        return []
-    seen.add(path)
-
-    result = []
-    full_path = os.path.join(base_dir, path)
+def process_file(file_name, base_dir, seen_files):
+    """
+    递归处理文件并去重。
+    """
+    full_path = os.path.join(base_dir, file_name)
     if not os.path.exists(full_path):
         print(f"Warning: file not found {full_path}", file=sys.stderr)
-        return []
-
-    with open(full_path, encoding="utf-8") as f:
+        return set()
+    
+    seen_files.add(file_name)
+    
+    results = set() # 使用集合自动去重
+    with open(full_path, "r", encoding="utf-8") as f:
         for raw in f:
             line = clean_line(raw)
             if not line:
                 continue
-
+            
             if line.startswith("include:"):
-                include_target = line.split("include:", 1)[1].strip()
-                result.extend(process_file(include_target, base_dir, seen,
-                                           remove_cn, keep_includes, cn_lines, cntocn))
+                target = line.split("include:", 1)[1].strip()
+                # 递归并将结果合并到当前集合
+                results.update(process_file(target, base_dir, seen_files))
             else:
-                if remove_cn and "@cn" in line:
-                    keep = False
-                    for inc in keep_includes:
-                        if path == inc or path.endswith("/" + inc):
-                            keep = True
-                            break
-                    if keep:
-                        result.append(line)
-                    else:
-                        if cntocn:
-                            cn_lines.append(line)  # 收集到全局 cn_lines
-                        # 否则直接丢弃
-                else:
-                    result.append(line)
-    return result
-
+                results.add(line)
+    return results
 
 def main():
-    args = parse_args()
-    keep_includes = [x.strip() for x in args.keep_include.split(",") if x.strip()]
+    parser = argparse.ArgumentParser(description="Process community data and clean workspace.")
+    parser.add_argument("-i", "--input", required=True, help="Working directory")
+    args = parser.parse_args()
 
-    # 收集输入输出映射
-    mappings = []
-    if args.i and args.o:
-        mappings.append((args.i, args.o))
-    for idx in range(1, 10):
-        i_val = getattr(args, f"i{idx}")
-        o_val = getattr(args, f"o{idx}")
-        if i_val and o_val:
-            mappings.append((i_val, o_val))
-
-    if not mappings:
-        print("No input/output specified", file=sys.stderr)
+    work_dir = os.path.abspath(args.input)
+    if not os.path.isdir(work_dir):
+        print(f"Error: {work_dir} is not a directory")
         sys.exit(1)
 
-    base_dir = os.path.dirname(os.path.abspath(mappings[0][0]))
-    all_results = {}
-    cn_lines_global = [] if args.cntocn else None
-    seen = set()
+    # 1. 核心定义
+    tasks = [
+        ("geolocation-cn", "cn.txt"),
+        ("geolocation-!cn", "proxy.txt")
+    ]
+    
+    # 记录所有需要保留的文件名
+    keep_filenames = {"cn.txt", "proxy.txt"}
+    # 记录递归中涉及到的所有原始碎片文件
+    involved_files = set()
 
-    for infile, outfile in mappings:
-        cn_lines = cn_lines_global if args.cntocn else []
-        lines = process_file(os.path.basename(infile), base_dir, seen,
-                             args.remove_cn, keep_includes, cn_lines, args.cntocn)
-        all_results[outfile] = lines
-        # 如果不是 --cntocn，则每个文件单独写 cn_lines
-        if not args.cntocn and cn_lines:
-            cn_out = outfile.replace(".txt", "-cn.txt")
-            all_results[cn_out] = cn_lines
+    # 2. 递归处理任务
+    for seed_name, output_name in tasks:
+        if not os.path.exists(os.path.join(work_dir, seed_name)):
+            print(f"Error: Seed file {seed_name} not found in {work_dir}")
+            continue
 
-    # 写入结果
-    for outfile, lines in all_results.items():
-        with open(outfile, "w", encoding="utf-8") as f:
-            f.write("\n".join(lines) + "\n")
+        print(f"Processing {seed_name}...")
+        # 递归并获取去重后的内容
+        final_content = process_file(seed_name, work_dir, involved_files)
+        
+        # 写入扁平化后的文件
+        output_path = os.path.join(work_dir, output_name)
+        with open(output_path, "w", encoding="utf-8") as f:
+            if final_content:
+                # 排序可以让输出更整洁
+                f.write("\n".join(sorted(list(final_content))) + "\n")
 
-    # 如果 --cntocn，集中写入到 -i2/-o2 或 cn.txt
-    if args.cntocn and cn_lines_global:
-        if len(mappings) >= 2:
-            _, outfile2 = mappings[1]
-            cn_target = outfile2
-        else:
-            cn_target = os.path.join(base_dir, "cn.txt")
-            print(f"Info: --cntocn enabled, writing @cn lines into {cn_target}", file=sys.stderr)
+    # 3. 确定最终保留名单
+    # 保留：两个生成的 txt + 两个原始种子文件 + 递归中 include 的所有文件
+    keep_filenames.update(involved_files)
 
-        with open(cn_target, "a", encoding="utf-8") as f:
-            f.write("\n".join(cn_lines_global) + "\n")
+    # 4. 执行删除
+    print("Cleaning up directory...")
+    current_files = os.listdir(work_dir)
+    for fname in current_files:
+        fpath = os.path.join(work_dir, fname)
+        
+        # 只处理文件（跳过子目录，除非你有特殊需求）
+        if os.path.isfile(fpath):
+            if fname not in keep_filenames:
+                try:
+                    os.remove(fpath)
+                except Exception as e:
+                    print(f"Failed to delete {fname}: {e}")
+            else:
+                print(f"Keep: {fname}")
 
-    # 删除多余文件
-    keep_files = set()
-    for infile, outfile in mappings:
-        keep_files.add(os.path.basename(infile))
-        keep_files.add(os.path.basename(outfile))
-    keep_files.update(seen)
-    if args.cntocn:
-        keep_files.add("cn.txt")
-
-    for fname in os.listdir(base_dir):
-        if fname not in keep_files:
-            try:
-                os.remove(os.path.join(base_dir, fname))
-            except Exception as e:
-                print(f"Warning: cannot delete {fname}: {e}", file=sys.stderr)
-
+    print("Process completed successfully.")
 
 if __name__ == "__main__":
     main()
