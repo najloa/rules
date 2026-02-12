@@ -99,6 +99,7 @@ jobs:
           ls -al
           # 复制新构建文件
           cp -r ../publish/* ./
+          echo "$(date +%Y%m%d%H%M%S)" > .update_timestamp
           git add .
           git commit -m "${{ env.RELEASE_NAME }}" || echo "Nothing to commit"
           #git push origin rules
