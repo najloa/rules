@@ -137,6 +137,9 @@ atwiki.jp
 touhouwiki.net
 wiki.gg
 
+# Software development to category-dev
+include:docker
+
 # Others
 include:dmm
 include:z-library
