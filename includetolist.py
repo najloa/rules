@@ -55,10 +55,12 @@ def main():
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
+    # ================= 🛠️ 保留白名单文件 =================
+    CUSTOM_KEEP_FILES = {"private"}
+    # ==========================================================
+
     tasks = [("cn", "cn.txt"), ("geolocation-!cn", "proxy.txt")]
     involved_files = set()
-    
-    # 新增：用于收集所有任务中带有 @cn 的域名行（使用集合自动去重）
     all_cn_tagged_lines = set()
 
     for seed_name, output_name in tasks:
@@ -66,8 +68,6 @@ def main():
             print(f"-> Processing {seed_name}...")
             content = process_file(seed_name, input_dir, involved_files)
             
-            # 【修改点 1】：从当前处理的内容中，筛选出包含 @cn 的行，加入到全局集合中
-            # 使用更严谨的正则或 split 确保是独立的修饰符，这里采用包含检测：' @cn' 或以 '@cn' 结尾
             for line in content:
                 if '@cn' in line:
                     all_cn_tagged_lines.add(line)
@@ -76,7 +76,6 @@ def main():
                 if content:
                     f.write("\n".join(sorted(list(content))) + "\n")
 
-    # 【修改点 2】：将收集到的 @cn 域名行写入到独立的 @cn.txt 文件中
     cn_file_name = "@cn.txt"
     with open(os.path.join(output_dir, cn_file_name), "w", encoding="utf-8") as f:
         if all_cn_tagged_lines:
@@ -87,9 +86,11 @@ def main():
     print(f"Cleaning directory: {input_dir}")
     must_keep = involved_files.copy()
     
-    # 【修改点 3】：如果输入和输出是同一个目录，把新的 @cn.txt 也加入白名单保护起来
+    # 【修改点】：首先将用户自定义的保留文件直接加入到主白名单中
+    must_keep.update(CUSTOM_KEEP_FILES)
+    
     if input_dir == output_dir:
-        must_keep.update({"private", "cn.txt", "proxy.txt", cn_file_name})
+        must_keep.update({"cn.txt", "proxy.txt", cn_file_name})
 
     for fname in os.listdir(input_dir):
         fpath = os.path.join(input_dir, fname)
