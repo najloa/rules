@@ -89,7 +89,7 @@ def main():
     
     # 【修改点 3】：如果输入和输出是同一个目录，把新的 @cn.txt 也加入白名单保护起来
     if input_dir == output_dir:
-        must_keep.update({"cn.txt", "proxy.txt", cn_file_name})
+        must_keep.update({"private", "cn.txt", "proxy.txt", cn_file_name})
 
     for fname in os.listdir(input_dir):
         fpath = os.path.join(input_dir, fname)
