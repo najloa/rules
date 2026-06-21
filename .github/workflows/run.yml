@@ -42,28 +42,21 @@ jobs:
           \cp -f ./geolocation-cn ./community/data/geolocation-cn
           \cp -f ./userlist ./community/data/userlist
           sed -i '/include:category-games-\!cn/d' ./community/data/category-entertainment
+          sed -i '/include:category-entertainment-ru/d' ./community/data/category-entertainment
+          sed -i '/include:youtube/d' ./community/data/category-entertainment
           # 赋予执行权限
           chmod +x includetolist.py
           ./includetolist.py -i ./community/data -o ./
-
-      - name: Create lists # 生成各类辅助列表
-        run: |
-          #echo "www.recaptcha.net" >> ./community/data/google-cn
-          #echo "www.recaptcha.net" >> ./google-cn.txt
-          cp ./twitchcdn ./community/data/twitchcdn
-          cp ./twitchcdn ./twitchcdn.txt
 
       - name: Build geosite.dat file # 构建 geosite.dat 文件
         run: |
           cd community || exit 1
           go run ./
-          #find . -type f -name "google*"
-          #ls
 
       - name: Move and zip files and generate sha256 hash # 移动、打包及生成校验码
         run: |
           install -Dp ./community/dlc.dat ./publish/geosite.dat
-          install -p {twitchcdn,proxy,cn}.txt ./publish/
+          install -p {proxy,cn,@cn}.txt ./publish/
           cd ./publish || exit 1
           sha256sum geosite.dat > geosite.dat.sha256sum # 生成 geosite.dat 校验
 
