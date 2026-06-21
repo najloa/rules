@@ -39,7 +39,6 @@ jobs:
       - name: Remove redundant domains
         run: |
           \cp -f ./geolocation-\!cn ./community/data/geolocation-\!cn
-          \cp -f ./geolocation-cn ./community/data/geolocation-cn
           \cp -f ./userlist ./community/data/userlist
           sed -i '/include:category-games-\!cn/d' ./community/data/category-entertainment
           sed -i '/include:category-entertainment-ru/d' ./community/data/category-entertainment
