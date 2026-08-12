@@ -3,6 +3,7 @@
 		"name": "dlc.dat",
 		"mode": "denylist",
 		"lists": [
+			"category-entertainment",
 			"pubmatic",
 			"taboola",
 			"dribbble",
