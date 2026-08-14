@@ -3,6 +3,7 @@
 		"name": "dlc.dat",
 		"mode": "denylist",
 		"lists": [
+			"category-ads",
 			"category-anticensorship",
 			"category-proxy-tunnels",
 			"dribbble",
