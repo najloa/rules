@@ -39,24 +39,7 @@ jobs:
       - name: Remove redundant domains
         run: |
           \cp -f ./userlist ./community/data/userlist
-          echo "include:userlist" >> ./community/data/geolocation-!cn
-          echo "include:z-library" >> ./community/data/geolocation-!cn
-          echo "include:alphabet" >> ./community/data/geolocation-!cn
-          echo "include:meta" >> ./community/data/geolocation-!cn
-          echo "include:yahoo" >> ./community/data/geolocation-!cn
-          echo "include:yandex" >> ./community/data/geolocation-!cn
-          echo "include:naver" >> ./community/data/geolocation-!cn
-          echo "include:gitbook" >> ./community/data/geolocation-!cn
-          echo "include:github" >> ./community/data/geolocation-!cn
-          echo "include:github1s" >> ./community/data/geolocation-!cn
-          echo "include:gitlab" >> ./community/data/geolocation-!cn
-          echo "include:volmoe" >> ./community/data/geolocation-!cn
-          echo "include:twitch" >> ./community/data/geolocation-!cn
-          echo "include:tiktok" >> ./community/data/geolocation-!cn
-          echo "include:spotify" >> ./community/data/geolocation-!cn
-          echo "include:soundcloud" >> ./community/data/geolocation-!cn
-          echo "include:pixiv" >> ./community/data/geolocation-!cn
-          echo "include:niconico" >> ./community/data/geolocation-!cn
+          \cp -f ./geolocation-!cn ./community/data/geolocation-!cn
 
       - name: Build geosite.dat file # 构建 geosite.dat 文件
         run: |
