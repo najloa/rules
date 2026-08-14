@@ -5,6 +5,7 @@
 		"lists": [
 			"cn",
 			"geolocation-cn",
+			"private",
 			"geolocation-!cn",
 			"category-ai-!cn"
 		]
