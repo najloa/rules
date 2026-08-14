@@ -8,27 +8,17 @@ include:category-anticensorship
 include:category-proxy-tunnels
 
 # Art & Design & Photography
-include:artstation
-include:dyna
-include:flickr
-include:glyphs
-include:jiyukobo
-include:morisawa
 include:pinterest
-
-bunka.go.jp
 
 # Communications
 include:category-communication
 
-# Entertainment & Games & Music & Podcasts & Videos
-include:category-entertainment
-
 # File & Image & Video hosting
+include:category-netdisk-!cn
+
 include:0x0
 include:casimages
 include:cloudinary
-include:dropbox
 include:gfycat
 include:imagebam
 include:imagecurl
@@ -36,13 +26,11 @@ include:imageshack
 include:imagetwist
 include:imgbb
 include:imgur
-include:pikpak
 include:pixhost
 include:postimages
 include:pstorage
 include:rumble
 include:streamable
-include:terabox
 
 # Forums & Social network
 include:category-forums
@@ -50,67 +38,22 @@ include:category-social-media-!cn
 
 # Media & News & Press
 include:category-media
-include:pugpig
 
 # Porn
 include:category-porn
 
 # Services & Softwares
 include:category-android-app-download
+include:category-urlshortner
 include:category-web-archive
 
 include:duckduckgo
+include:gravatar
 include:jwplayer
-include:mega
-include:patreon
+include:tumblr
 
-## Aurora Open Source Software (https://gitlab.com/AuroraOSS)
-auroraoss.com
-## BiliPlus
-biliplus.com
-## CataBoom
-cataboom.com
-## Consent Management Platforms / Cookie service
-consentpro.com
-cookiepro.com
-cookielaw.org
-onetrust.com
-osano.com
-usercentrics.eu
-## Greasy Fork
-greasyfork.org
-## Online LaTeX Editor
-cloudlatex.io
-overleaf.com
-## Translator & Dictionary
+## Translators & Dictionaries
 include:linguee
-collinsdictionary.com
-ldoceonline.com
-immersivetranslate.com # 沉浸式翻译 (国际版)
-## OriginLab (Graphing for Science and Engineering)
-originlab.com
-## OsmAnd
-osmand.net
-
-# Software development
-# include:category-dev
-include:gitbook
-include:github
-include:github1s
-include:gitlab
-
-# Tech companies
-# include:category-companies
-include:google
-include:meta
-include:yahoo
-include:yandex
-include:naver
-
-include:x
-
-civitai.com
-porkbun.com
 
 # Torrent websites
 include:1337x
@@ -138,10 +81,33 @@ atwiki.jp
 touhouwiki.net
 wiki.gg
 
-# Software development to category-dev
-include:docker
-
 # Others
-include:dmm
-include:z-library
 include:userlist
+include:z-library
+# Tech companies
+include:alphabet
+include:meta
+include:yahoo
+include:yandex
+include:naver
+# Software development
+include:gitbook
+include:github
+include:github1s
+include:gitlab
+# Entertainment & Games & Music & Podcasts & Videos
+include:category-entertainment
+include:disney
+include:dlsite
+include:goodreads
+include:likee
+include:netflix
+include:niconico
+include:pixiv
+include:primevideo
+include:soundcloud
+include:spotify
+include:tiktok
+include:twitch
+include:vimeo
+include:volmoe
