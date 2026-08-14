@@ -3,8 +3,10 @@
 		"name": "dlc.dat",
 		"mode": "allowlist",
 		"lists": [
+			"cn",
 			"geolocation-cn",
-			"36kr"
+			"geolocation-!cn",
+			"category-ai-!cn"
 		]
 	}
 ]
