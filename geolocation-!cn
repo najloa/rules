@@ -96,7 +96,6 @@ include:github
 include:github1s
 include:gitlab
 # Entertainment & Games & Music & Podcasts & Videos
-include:category-entertainment
 include:disney
 include:dlsite
 include:goodreads
