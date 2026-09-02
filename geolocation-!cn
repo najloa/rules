@@ -3,15 +3,15 @@
 # AI Chat
 include:category-ai-!cn
 
-# Anti-censorship & Anti-GFW & Privacy protection & VPN tools
-include:category-anticensorship
-include:category-proxy-tunnels
-
 # Art & Design & Photography
 include:pinterest
 
 # Communications
-include:category-communication
+# include:category-communication
+include:discord
+include:signal
+include:telegram
+include:whatsapp
 
 # File & Image & Video hosting
 include:category-netdisk-!cn
@@ -66,7 +66,7 @@ dmhy.org
 rutor.info
 
 # VPN services
-include:category-vpnservices
+# include:category-vpnservices
 
 # Wiki
 include:fandom
