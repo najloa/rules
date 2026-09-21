@@ -1,102 +1,22 @@
+include:userlist
+include:gfwlist
+include:z-library
+include:google
+include:yahoo
+include:yandex
+
 # This list contains domains that don't have access point in China mainland. This is opposite to geolocation-cn.
 
 # AI Chat
 include:category-ai-!cn
 
-# Art & Design & Photography
-include:pinterest
-
 # Communications
-# include:category-communication
 include:discord
 include:signal
 include:telegram
 include:whatsapp
 
-# File & Image & Video hosting
-include:category-netdisk-!cn
-
-include:0x0
-include:casimages
-include:cloudinary
-include:gfycat
-include:imagebam
-include:imagecurl
-include:imageshack
-include:imagetwist
-include:imgbb
-include:imgur
-include:pixhost
-include:postimages
-include:pstorage
-include:rumble
-include:streamable
-
-# Forums & Social network
-include:category-forums
-include:category-social-media-!cn
-
-# Media & News & Press
-include:category-media
-
-# Porn
-include:category-porn
-
-# Services & Softwares
-include:category-android-app-download
-include:category-urlshortner
-include:category-web-archive
-
-include:duckduckgo
-include:gravatar
-include:jwplayer
-include:tumblr
-
-## Translators & Dictionaries
-include:linguee
-
-# Torrent websites
-include:1337x
-include:btdig
-include:demonoid
-include:nyaa
-include:piratebay
-include:rarbg
-dmhy.org
-rutor.info
-
-# VPN services
-# include:category-vpnservices
-
-# Wiki
-include:fandom
-include:miraheze
-include:scp
-include:translatewiki
-include:wikidot
-include:wikihow
-include:wikimedia
-
-atwiki.jp
-touhouwiki.net
-wiki.gg
-
-# Others
-include:userlist
-include:z-library
-# Tech companies
-include:alphabet
-include:meta
-include:yahoo
-include:yandex
-include:naver
-# Software development
-include:gitbook
-include:github
-include:github1s
-include:gitlab
 # Entertainment & Games & Music & Podcasts & Videos
-include:disney
 include:dlsite
 include:goodreads
 include:likee
@@ -110,3 +30,45 @@ include:tiktok
 include:twitch
 include:vimeo
 include:volmoe
+
+# File & Image & Video hosting
+include:category-netdisk-!cn
+include:imgur
+include:rumble
+include:streamable
+
+# Forums & Social network
+include:2ch
+include:4chan
+include:5ch
+include:6park
+include:ck101
+include:dcard
+include:quora
+include:reddit
+
+18p2p.com
+8chan.moe
+
+include:bluesky
+include:facebook
+include:instagram
+include:threads
+include:twitter
+include:vk
+
+fansly.com
+onlyfans.com
+
+# Porn
+include:category-porn
+
+# Torrent websites
+include:1337x
+include:btdig
+include:demonoid
+include:nyaa
+include:piratebay
+include:rarbg
+dmhy.org
+rutor.info
