@@ -40,6 +40,7 @@ jobs:
         run: |
           \cp -f ./userlist ./community/data/userlist
           \cp -f ./geolocation-!cn ./community/data/geolocation-!cn
+          curl -L "https://cdn.jsdelivr.net/gh/pexcn/daily@gh-pages/gfwlist/gfwlist.txt" -o ./community/data/gfwlist
 
       - name: Build geosite.dat file # 构建 geosite.dat 文件
         run: |
