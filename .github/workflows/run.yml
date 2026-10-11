@@ -6,7 +6,7 @@ on:
     branches:
       - main # 分支有推送时触发
     paths:
-      - "**/userlist" # 文件的变动时触发
+      - "userlist" # 文件的变动时触发
   schedule:
     - cron: "0 22 * * *" # 每天 22:00 自动触发
 jobs:
