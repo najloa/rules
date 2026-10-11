@@ -1,5 +1,5 @@
 include:userlist
-include:gfwlist
+include:gfw
 include:z-library
 include:google
 include:yahoo
