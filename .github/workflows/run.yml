@@ -40,7 +40,7 @@ jobs:
         run: |
           \cp -f ./userlist ./community/data/userlist
           \cp -f ./geolocation-!cn ./community/data/geolocation-!cn
-          curl -L "https://cdn.jsdelivr.net/gh/pexcn/daily@gh-pages/gfwlist/gfwlist.txt" -o ./community/data/gfwlist
+          curl -L "https://cdn.jsdelivr.net/gh/pexcn/daily@gh-pages/gfwlist/gfwlist.txt" -o ./community/data/gfw
 
       - name: Build geosite.dat file # 构建 geosite.dat 文件
         run: |
@@ -63,41 +63,34 @@ jobs:
           file_glob: true
           file: ./publish/*
 
-      - name: Git push assets to "release" branch # 推送文件到 release 分支
-        run: |
-          cd publish || exit 1
-          git init
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout -b release
-          git add .
-          git commit -m "${{ env.RELEASE_NAME }}"
-          git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
-          git push -f -u origin release
+#      - name: Git push assets to "release" branch # 推送文件到 release 分支
+#        run: |
+#          cd publish || exit 1
+#          git init
+#          git config --local user.name "github-actions[bot]"
+#          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+#          git checkout -b release
+#          git add .
+#          git commit -m "${{ env.RELEASE_NAME }}"
+#          git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
+#          git push -f -u origin release
 
-      - name: Push rules files to public repo
-        run: |
-          git clone https://x-access-token:${{ secrets.PUBLIC_REPO_TOKEN }}@github.com/najloa/geoip.git public-repo
-          cd public-repo
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout rules || git checkout -b rules
+#      - name: Push rules files to public repo
+#        run: |
+#          git clone https://x-access-token:${{ secrets.PUBLIC_REPO_TOKEN }}@github.com/najloa/geoip.git public-repo
+#          cd public-repo
+#          git config user.name "github-actions[bot]"
+#          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+#          git checkout rules || git checkout -b rules
           # 清理旧文件
-          ls -al
+#          ls -al
           # 复制新构建文件
-          cp -r ../publish/* ./
-          echo "$(date +%Y%m%d%H%M%S)" > .update_timestamp
-          git add .
-          git commit -m "${{ env.RELEASE_NAME }}" || echo "Nothing to commit"
+#          cp -r ../publish/* ./
+#          echo "$(date +%Y%m%d%H%M%S)" > .update_timestamp
+#          git add .
+#          git commit -m "${{ env.RELEASE_NAME }}" || echo "Nothing to commit"
           #git push origin rules
-          git push -f origin rules
-
-      #- name: Purge jsdelivr CDN # 刷新 jsdelivr CDN 缓存
-      #  run: |
-      #    cd publish || exit 1
-      #    for file in $(ls); do
-      #      curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@release/${file}"
-      #    done
+#          git push -f origin rules
 
       - name: Delete workflow runs
         uses: Mattraks/delete-workflow-runs@main
