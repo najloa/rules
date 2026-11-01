@@ -1,22 +1,22 @@
-name: Build V2Ray rules dat files # 构建 V2Ray 规则数据文件
+name: Build V2Ray rules dat files
 
 on:
-  workflow_dispatch: # 手动触发
+  workflow_dispatch:
   push:
-    branches:
-      - main # 分支有推送时触发
     paths:
-      - "userlist" # 文件的变动时触发
+      - "userlist"
   schedule:
-    - cron: "0 22 * * *" # 每天 22:00 自动触发
+    - cron: "0 22 * * *"
+
 jobs:
   build:
-    runs-on: ubuntu-latest # 使用最新的 Ubuntu 虚拟机
+    runs-on: ubuntu-latest
+
     steps:
       - name: Set variables # 设置环境变量
         run: |
-          echo "RELEASE_NAME=Released on $(date +%Y%m%d%H%M)" >> $GITHUB_ENV # 发布名称
-          echo "TAG_NAME=$(date +%Y%m%d%H%M)" >> $GITHUB_ENV # 标签名称
+          echo "RELEASE_NAME=Released on $(date +%Y%m%d%H%M)" >> $GITHUB_ENV
+          echo "TAG_NAME=$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
         shell: bash
 
       - name: Checkout the "main" branch of this repo # 检出本仓库的 main 分支
@@ -30,11 +30,20 @@ jobs:
           repository: v2fly/domain-list-community
           path: community
 
+      - name: Checkout Loyalsoldier/geoip # 检出 GeoIP 项目
+        uses: actions/checkout@v5
+        with:
+          repository: Loyalsoldier/geoip
+          path: geoip
+
       - name: Setup Go # 安装 Go 语言环境
         uses: actions/setup-go@v6
         with:
-          go-version-file: ./community/go.mod
-          cache-dependency-path: ./community/go.sum
+          go-version-file: ./geoip/go.mod
+          cache: true
+          cache-dependency-path: |
+            ./community/go.sum
+            ./geoip/go.sum
 
       - name: Remove redundant domains
         run: |
@@ -48,11 +57,77 @@ jobs:
           cd community || exit 1
           go run ./main.go --datprofile='./dat_diy.json'
 
-      - name: Move and zip files and generate sha256 hash # 移动、打包及生成校验码
+      - name: Build customized geoip.dat file # 构建定制 GeoIP 文件
+        run: |
+          cd geoip || exit 1
+
+          cat > config.json <<'EOF'
+          {
+            "input": [
+              {
+                "type": "text",
+                "action": "add",
+                "args": {
+                  "name": "cn",
+                  "uri": "https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/china.txt",
+                  "onlyIPType": "ipv4"
+                }
+              },
+              {
+                "type": "text",
+                "action": "add",
+                "args": {
+                  "name": "cn",
+                  "uri": "https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/china6.txt",
+                  "onlyIPType": "ipv6"
+                }
+              },
+              {
+                "type": "text",
+                "action": "add",
+                "args": {
+                  "name": "telegram",
+                  "uri": "https://core.telegram.org/resources/cidr.txt"
+                }
+              },
+              {
+                "type": "private",
+                "action": "add"
+              }
+            ],
+            "output": [
+              {
+                "type": "v2rayGeoIPDat",
+                "action": "output",
+                "args": {
+                  "outputDir": "./output",
+                  "outputName": "geoip.dat",
+                  "wantedList": [
+                    "cn",
+                    "private",
+                    "telegram"
+                  ]
+                }
+              }
+            ]
+          }
+          EOF
+
+          go run ./ convert -c ./config.json
+
+          test -s ./output/geoip.dat || {
+            echo "Error: geoip.dat was not generated!"
+            exit 1
+          }
+
+      - name: Move and generate sha256 hash # 移动文件及生成校验码
         run: |
           install -Dp ./community/dlc.dat ./publish/geosite.dat
+          install -Dp ./geoip/output/geoip.dat ./publish/geoip.dat
+
           cd ./publish || exit 1
-          sha256sum geosite.dat > geosite.dat.sha256sum # 生成 geosite.dat 校验
+          sha256sum geosite.dat > geosite.dat.sha256sum
+          sha256sum geoip.dat > geoip.dat.sha256sum
 
       - name: Release and upload assets # 发布 Release 并上传资产
         uses: svenstaro/upload-release-action@v2
