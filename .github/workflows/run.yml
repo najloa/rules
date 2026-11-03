@@ -117,7 +117,10 @@ jobs:
               cache[name] = entries
               return entries
   
-          rules = resolve("geolocation-!cn")
+          rules = (
+              resolve("geolocation-!cn")
+              + resolve("cn")
+          )
   
           def is_covered(domain):
               for typ, parent in rules:
