@@ -1,10 +1,10 @@
 include:userlist
+include:gfw
 include:z-library
 include:google
 include:yahoo
 include:yandex
-
-# This list contains domains that don't have access point in China mainland. This is opposite to geolocation-cn.
+include:github
 
 # AI Chat
 include:category-ai-!cn
@@ -71,3 +71,9 @@ include:piratebay
 include:rarbg
 dmhy.org
 rutor.info
+
+# VPN services
+include:category-vpnservices
+
+# Wiki
+include:wikimedia
