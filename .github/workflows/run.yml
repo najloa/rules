@@ -48,6 +48,111 @@ jobs:
           \cp -f ./geolocation-!cn ./community/data/geolocation-!cn
           curl -L "https://cdn.jsdelivr.net/gh/pexcn/daily@gh-pages/gfwlist/gfwlist.txt" -o ./community/data/gfw
 
+
+          python3 - <<'PY'
+          from pathlib import Path
+  
+          root = Path("./community/data")
+          cache = {}
+          resolving = set()
+  
+          def parse_rule(line):
+              line = line.split("#", 1)[0].strip()
+              if not line:
+                  return None
+  
+              head = line.split()[0]
+  
+              if head.startswith("include:"):
+                  return ("include", head[8:])
+  
+              if ":" in head:
+                  typ, value = head.split(":", 1)
+              else:
+                  typ, value = "domain", head
+  
+              typ = typ.lower()
+              value = value.lower().rstrip(".")
+  
+              if typ not in ("domain", "full"):
+                  return None
+  
+              return (typ, value)
+  
+          def resolve(name):
+              name = name.lower()
+  
+              if name == "gfw":
+                  return []
+  
+              if name in cache:
+                  return cache[name]
+  
+              if name in resolving:
+                  raise RuntimeError(f"Circular inclusion: {name}")
+  
+              path = root / name
+              if not path.is_file():
+                  raise FileNotFoundError(f"Missing domain list: {path}")
+  
+              resolving.add(name)
+              entries = []
+  
+              try:
+                  for line in path.read_text(encoding="utf-8").splitlines():
+                      rule = parse_rule(line)
+                      if not rule:
+                          continue
+  
+                      typ, value = rule
+  
+                      if typ == "include":
+                          if value.lower() != "gfw":
+                              entries.extend(resolve(value))
+                      else:
+                          entries.append(rule)
+              finally:
+                  resolving.remove(name)
+  
+              cache[name] = entries
+              return entries
+  
+          rules = resolve("geolocation-!cn")
+  
+          def is_covered(domain):
+              for typ, parent in rules:
+                  if domain == parent:
+                      return True
+  
+                  if typ == "domain" and domain.endswith("." + parent):
+                      return True
+  
+              return False
+  
+          gfw = root / "gfw"
+          original = gfw.read_text(encoding="utf-8").splitlines(keepends=True)
+  
+          filtered = []
+          removed = 0
+  
+          for line in original:
+              rule = parse_rule(line)
+  
+              if rule and rule[0] in ("domain", "full"):
+                  if is_covered(rule[1]):
+                      removed += 1
+                      continue
+  
+              filtered.append(line)
+  
+          gfw.write_text("".join(filtered), encoding="utf-8")
+  
+          print(f"Loaded domain rules: {len(rules)}")
+          print(f"Removed redundant GFW domains: {removed}")
+          print(f"Remaining GFW lines: {len(filtered)}")
+          PY
+
+
       - name: Build geosite.dat file # 构建 geosite.dat 文件
         run: |
           \cp -f ./dat_diy.json ./community/dat_diy.json
