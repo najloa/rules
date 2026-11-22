@@ -4,6 +4,9 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "0 22 * * *"
+  push:
+    paths:
+      - 'userlist'
 
 jobs:
   build:
